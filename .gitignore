@@ -1,0 +1,10 @@
+# git config --global core.excludesfile ~/.gitignore
+
+# IDE Specific #
+################
+.idea/
+
+# OS generated files #
+######################
+.DS_Store
+Thumbs.db
