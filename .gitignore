@@ -3,6 +3,7 @@
 # IDE Specific #
 ################
 .idea/
+*.ids
 
 # OS generated files #
 ######################
