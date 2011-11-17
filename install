@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+ln -s ~/dots/.vim ~/.vim
+ln -s ~/dots/.vimrc ~/.vimrc
+ln -s ~/dots/.inputrc ~/.inputrc
+ln -s ~/dots/.gitignore ~/.gitignore
+cd ~/.vim
+mkdir bundle
+./update_bundles
+cd ~
