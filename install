@@ -4,7 +4,13 @@ ln -s ~/dots/.vim ~/.vim
 ln -s ~/dots/.vimrc ~/.vimrc
 ln -s ~/dots/.inputrc ~/.inputrc
 ln -s ~/dots/.gitignore ~/.gitignore
+
 cd ~/.vim
 mkdir bundle
+
 ./update_bundles
+
 cd ~
+
+# Download git-autocomplete
+curl https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
