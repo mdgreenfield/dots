@@ -4,7 +4,7 @@ git_bundles = [
   "git://github.com/astashov/vim-ruby-debugger.git",
   "git://github.com/ervandew/supertab.git",
 #  "git://github.com/godlygeek/tabular.git",
-  "git://github.com/hallison/vim-rdoc.git",
+  "git://github.com/depuracao/vim-rdoc.git",
 #  "git://github.com/msanders/snipmate.vim.git",
   "git://github.com/pangloss/vim-javascript.git",
   "git://github.com/scrooloose/nerdtree.git",
