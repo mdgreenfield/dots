@@ -1,0 +1,30 @@
+# Color highlighting of output makes stuff easier to read
+[color]
+    branch = auto
+    diff = auto
+    status = auto
+[color "branch"]
+    current = green reverse
+    local = green
+    remote = yellow
+[color "diff"]
+    meta = yellow
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow bold
+    changed = red bold
+    untracked = cyan
+[alias]
+    # The "lol" alias stands for "log one line" and
+    # shows a great summary of your repo
+    lol = log --oneline --graph --decorate
+    unstage = reset HEAD
+    co = checkout
+[core]
+    excludesfile = /Users/mgreenfield/.gitignore
+    autocrlf = false
+[diff]
+    # For Github-style word diffs
+    wordRegex = [^[:space:]]

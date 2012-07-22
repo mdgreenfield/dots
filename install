@@ -14,3 +14,4 @@ cd ~
 
 # Download git-autocomplete
 curl https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
+curl https://github.com/git/git/raw/master/contrib/completion/git-prompt.sh -OL -o ~/git-prompt.sh
