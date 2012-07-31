@@ -4,6 +4,7 @@ ln -s ~/dots/.vim ~/.vim
 ln -s ~/dots/.vimrc ~/.vimrc
 ln -s ~/dots/.inputrc ~/.inputrc
 ln -s ~/dots/.gitignore ~/.gitignore
+ln -s ~/dots/.irbrc ~/.irbrc
 
 cd ~/.vim
 mkdir bundle
