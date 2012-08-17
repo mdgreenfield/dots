@@ -22,6 +22,12 @@
     lol = log --oneline --graph --decorate
     unstage = reset HEAD
     co = checkout
+
+    # Delete all remote branches that have been merged. Excluding master and jenkins.
+    cr = !git branch -r --merged origin | grep -E '^[[:space:]]*origin' | grep -v -E 'master|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
+
+    # Delete all loacl branches that have been merged. Excluding the current branch and master.
+    cl = !git branch --merged | grep -v -E '*|master' | xargs git branch -d
 [core]
     excludesfile = /Users/mgreenfield/.gitignore
     autocrlf = false
