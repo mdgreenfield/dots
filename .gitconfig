@@ -24,6 +24,9 @@
     co = checkout
     st = status
 
+    aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+    alias = !sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -
+
     # Delete all remote branches that have been merged. Excluding master and jenkins.
     cr = !git branch -r --merged origin | grep -E '^[[:space:]]*origin' | grep -v -E 'master|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
 
