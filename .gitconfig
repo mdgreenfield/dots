@@ -22,7 +22,7 @@
     lol = log --oneline --graph --decorate
     unstage = reset HEAD
     co = checkout
-    st = status
+    st = status -st
     sr = svn rebase
 
     aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
@@ -36,7 +36,6 @@
 [core]
     excludesfile = /Users/mgreenfield/.gitignore
     autocrlf = false
-    ignorecase = false
 [diff]
     # For Github-style word diffs
     wordRegex = [^[:space:]]
