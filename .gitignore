@@ -2,11 +2,15 @@
 # git config --global core.autocrlf true
 
 bundler_stubs/
+target/
 
 # IDE Specific #
 ################
 .idea/
 *.ids
+*.iws
+*.ipr
+*.iml
 
 # OS generated files #
 ######################
