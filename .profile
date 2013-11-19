@@ -87,3 +87,7 @@ fi
 if [ -z $NO_SVN_PROMPT ]; then
     export PROMPT_COMMAND=spwd
 fi
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
