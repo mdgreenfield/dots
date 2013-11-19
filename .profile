@@ -9,6 +9,7 @@ alias g='git'
 complete -o default -o nospace -F _git g
 
 alias sp="source ~/.profile"
+alias ll="ls -al"
 
 # This stuff will give you a fancy-dancy prompt that includes the
 # svn/git trunk/tags/branches part of the URL in it so you will always know
@@ -78,6 +79,10 @@ function spwd() {
         export PS1=$DEFAULT_PS1
     fi
 }
+
+if [ -z "${DEFAULT_PS1}" ]; then
+    export DEFAULT_PS1="\u:\w $ "
+fi
 
 if [ -z $NO_SVN_PROMPT ]; then
     export PROMPT_COMMAND=spwd

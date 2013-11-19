@@ -22,7 +22,7 @@
     lol = log --oneline --graph --decorate
     unstage = reset HEAD
     co = checkout
-    st = status -st
+    st = status
     sr = svn rebase
 
     aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
