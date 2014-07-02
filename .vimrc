@@ -15,6 +15,11 @@ set ls=2
 
 set showtabline=2
 
+" Show the first match for the pattern while typing
+set incsearch
+" Highlight all matches for a pattern
+set hlsearch
+
 filetype plugin indent on
 
 autocmd FileType * set tabstop=4|set softtabstop=4|set shiftwidth=4|set expandtab|set autoindent
