@@ -16,3 +16,12 @@ cd ~
 # Download git-autocomplete
 curl https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
 curl https://github.com/git/git/raw/master/contrib/completion/git-prompt.sh -OL -o ~/git-prompt.sh
+
+# Install ctags hooks into git template. These will be added to new repos and cloned repos. Existing repos should call `git init`.
+mkdir -p ~/.git_template/hooks
+ln -s ~/dots/git/hooks/ctags ~/.git_template/hooks/ctags
+ln -s ~/dots/git/hooks/post-commit ~/.git_template/hooks/post-commit
+ln -s ~/dots/git/hooks/post-checkout ~/.git_template/hooks/post-checkout
+ln -s ~/dots/git/hooks/post-merge ~/.git_template/hooks/post-merge
+ln -s ~/dots/git/hooks/post-rewrite ~/.git_template/hooks/post-rewrite
+

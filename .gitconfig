@@ -33,9 +33,14 @@
 
     # Delete all loacl branches that have been merged. Excluding the current branch and master.
     cl = !git branch --merged | grep -v -E '*|master' | xargs git branch -d
+
+    ctags = !.git/hooks/ctags
 [core]
     excludesfile = /Users/mgreenfield/.gitignore
     autocrlf = false
 [diff]
     # For Github-style word diffs
     wordRegex = [^[:space:]]
+[init]
+    # Set a template directory for all git repos
+    templatedir = ~/.git_template
