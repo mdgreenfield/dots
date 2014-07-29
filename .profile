@@ -10,6 +10,8 @@ complete -o default -o nospace -F _git g
 
 alias sp="source ~/.profile"
 alias ll="ls -al"
+alias bi='bundle install --path .bundle/gems --binstubs .bundle/bin'
+
 function fast_grep() { find . -type f | parallel -k -j150% -n 1000 -m grep -H -n "${1}" {}; }
 
 # This stuff will give you a fancy-dancy prompt that includes the
