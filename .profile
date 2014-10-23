@@ -3,6 +3,7 @@ source ~/git-prompt.sh
 
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
+alias git=hub
 alias g='git'
 
 # Autocomplete for 'g' as well

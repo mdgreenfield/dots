@@ -3,6 +3,7 @@
 
 bundler_stubs/
 target/
+.bundle/
 
 # IDE Specific #
 ################

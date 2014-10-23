@@ -35,6 +35,10 @@
     cl = !git branch --merged | grep -v -E '*|master' | xargs git branch -d
 
     ctags = !.git/hooks/ctags
+    b = browse
+    pr = pull-request -o
+[rerere]
+    enabled = true
 [core]
     excludesfile = /Users/mgreenfield/.gitignore
     autocrlf = false
