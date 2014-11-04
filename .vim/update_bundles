@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 git_bundles = [
-  "git://github.com/astashov/vim-ruby-debugger.git",
+#  "git://github.com/astashov/vim-ruby-debugger.git",
+  "git://github.com/bling/vim-airline",
   "git://github.com/ervandew/supertab.git",
 #  "git://github.com/godlygeek/tabular.git",
   "git://github.com/depuracao/vim-rdoc.git",
@@ -18,6 +19,7 @@ git_bundles = [
   "git://github.com/tpope/vim-repeat.git",
   "git://github.com/tpope/vim-surround.git",
   "git://github.com/tpope/vim-vividchalk.git",
+  "git://github.com/majutsushi/tagbar",
 #  "git://github.com/tsaleh/taskpaper.vim.git",
 #  "git://github.com/tsaleh/vim-matchit.git",
 #  "git://github.com/tsaleh/vim-shoulda.git",
@@ -25,12 +27,12 @@ git_bundles = [
 #  "git://github.com/tsaleh/vim-tmux.git",
   "git://github.com/vim-ruby/vim-ruby.git",
   "git://github.com/vim-scripts/Gist.vim.git",
+  "git://github.com/kien/ctrlp.vim.git",
+  "git://github.com/flazz/vim-colorschemes.git"
 ]
 
 vim_org_scripts = [
-  ["IndexedSearch", "7062",  "plugin"],
-  ["jquery",        "12107", "syntax"],
-  ["desert256",     "4055",  "colors"]
+
 ]
 
 require 'fileutils'

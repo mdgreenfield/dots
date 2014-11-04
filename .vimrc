@@ -1,7 +1,7 @@
 call pathogen#infect()
 call pathogen#helptags()
-
 syntax on
+filetype plugin indent on
 
 " Remove all trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
@@ -17,22 +17,40 @@ set showtabline=2
 
 " Show the first match for the pattern while typing
 set incsearch
+set ignorecase
+set smartcase
 " Highlight all matches for a pattern
 set hlsearch
-
-filetype plugin indent on
+:nnoremap \q :nohlsearch<CR>
 
 autocmd FileType * set tabstop=4|set softtabstop=4|set shiftwidth=4|set expandtab|set autoindent
 autocmd FileType ruby set tabstop=2|set softtabstop=2|set shiftwidth=2|set expandtab|set autoindent
 
 set backspace=indent,eol,start
 
-"Informative status line
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+"Informative status line if for some reason https://github.com/bling/vim-airline is not installed
+"set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
 "Set color scheme
-colorscheme desert256
+colorscheme desert256v2
 
 "Some shortcuts for find-replace
-noremap ;; :%s:::g<Left><Left><Left>
-noremap ;' :%s:::cg<Left><Left><Left><Left>
+:nnoremap ;; :%s:::g<Left><Left><Left>
+:nnoremap ;' :%s:::cg<Left><Left><Left><Left>
+
+"Fix the way 'j' and 'k' move around wrapped lines.
+:nnoremap j gj
+:nnoremap k gk
+
+"Set ctrl-e to jump between buffers
+:nnoremap <C-e> :e#<CR>
+
+"Cycle between buffers
+:nnoremap <C-n> :bnext<CR>
+:nnoremap <C-p> :bprev<CR>
+
+"""""" PLUGING SETTINGS
+:nnoremap \e :NERDTreeToggle<CR>
+
+:nnoremap ; :CtrlPBuffer<CR>
+
