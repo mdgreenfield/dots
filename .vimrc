@@ -15,6 +15,8 @@ set ls=2
 
 set showtabline=2
 
+set timeoutlen=500
+
 " Show the first match for the pattern while typing
 set incsearch
 set ignorecase
@@ -48,6 +50,11 @@ colorscheme desert256v2
 "Cycle between buffers
 :nnoremap <C-n> :bnext<CR>
 :nnoremap <C-p> :bprev<CR>
+
+:nnoremap \t :set expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
+:nnoremap \T :set expandtab tabstop=8 shiftwidth=8 softtabstop=4<CR>
+:nnoremap \M :set noexpandtab tabstop=8 softtabstop=4 shiftwidth=4<CR>
+:nnoremap \m :set expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 
 """""" PLUGING SETTINGS
 :nnoremap \e :NERDTreeToggle<CR>
