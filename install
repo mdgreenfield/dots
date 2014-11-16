@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cp ~/dots/.profile ~/.profile
 cp ~/dots/.vimrc ~/.vimrc
 cp ~/dots/.gitignore ~/.gitignore
 cp ~/dots/.irbrc ~/.irbrc

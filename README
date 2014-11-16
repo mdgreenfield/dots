@@ -1,3 +1,5 @@
+FIRST, copy the `.profile` to your home dir.
+
 All the dotfiles that I need to get up and running. To install just run
 the install script in the root directory.
 
