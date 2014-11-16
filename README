@@ -1,2 +1,11 @@
 All the dotfiles that I need to get up and running. To install just run
 the install script in the root directory.
+
+NOTE: on OS X you may need to do the following (hope to automate this later):
+
+- `brew install ctags`
+- `brew install hub`
+
+If you want faster searching install the_silver_searcher. Vim should still successfully
+load without this installed.
+- `brew install the_silver_searcher`

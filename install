@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
 
-ln -s ~/dots/.vim ~/.vim
-ln -s ~/dots/.vimrc ~/.vimrc
-ln -s ~/dots/.inputrc ~/.inputrc
-ln -s ~/dots/.gitignore ~/.gitignore
-ln -s ~/dots/.irbrc ~/.irbrc
+cp ~/dots/.profile ~/.profile
+cp ~/dots/.vimrc ~/.vimrc
+cp ~/dots/.gitignore ~/.gitignore
+cp ~/dots/.irbrc ~/.irbrc
+cp ~/dots/.my.cnf ~/.my.cnf
 
-cd ~/.vim
-mkdir bundle
+mkdir -p ~/.vim/autoload ~/.vim/bundle
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
-./update_bundles
+cp ~/dots/.vim/update_bundles ~/.vim/update_bundles
+~/.vim/update_bundles
 
 cd ~
-
 # Download git-autocomplete
 curl https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
 curl https://github.com/git/git/raw/master/contrib/completion/git-prompt.sh -OL -o ~/git-prompt.sh
 
 # Install ctags hooks into git template. These will be added to new repos and cloned repos. Existing repos should call `git init`.
 mkdir -p ~/.git_template/hooks
-ln -s ~/dots/git/hooks/ctags ~/.git_template/hooks/ctags
-ln -s ~/dots/git/hooks/post-commit ~/.git_template/hooks/post-commit
-ln -s ~/dots/git/hooks/post-checkout ~/.git_template/hooks/post-checkout
-ln -s ~/dots/git/hooks/post-merge ~/.git_template/hooks/post-merge
-ln -s ~/dots/git/hooks/post-rewrite ~/.git_template/hooks/post-rewrite
+cp -R ~/dots/git/hooks ~/.git_template/hooks
 
