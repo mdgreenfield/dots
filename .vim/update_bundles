@@ -25,7 +25,9 @@ git_bundles = [
   "git://github.com/vim-scripts/Gist.vim.git",
   "git://github.com/kien/ctrlp.vim.git",
   "git://github.com/airblade/vim-gitgutter",
-  "git://github.com/flazz/vim-colorschemes.git"
+  "git://github.com/flazz/vim-colorschemes.git",
+  "https://github.com/bkad/CamelCaseMotion.git",
+  "https://github.com/vim-scripts/argtextobj.vim"
 ]
 
 vim_org_scripts = [
