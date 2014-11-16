@@ -1,10 +1,13 @@
 source ~/git-completion.bash
 source ~/git-prompt.sh
 
+export EDITOR=vim
+
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
 alias git=hub
 alias g='git'
+alias vi='vim'
 
 # Autocomplete for 'g' as well
 complete -o default -o nospace -F _git g
