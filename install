@@ -16,7 +16,3 @@ cd ~
 curl https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
 curl https://github.com/git/git/raw/master/contrib/completion/git-prompt.sh -OL -o ~/git-prompt.sh
 
-# Install ctags hooks into git template. These will be added to new repos and cloned repos. Existing repos should call `git init`.
-mkdir -p ~/.git_template/hooks
-cp -R ~/dots/git/hooks ~/.git_template/hooks
-
