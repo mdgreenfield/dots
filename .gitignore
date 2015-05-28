@@ -4,6 +4,7 @@
 bundler_stubs/
 target/
 .bundle/
+*.swp
 
 # IDE Specific #
 ################
