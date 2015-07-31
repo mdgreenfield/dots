@@ -1,7 +1,17 @@
 #!/bin/sh
+#
+# Detect projects with some sort of changelog file, alerting the committer before committing.
+#
+# If the $CHANGELOG_FILE does not exist, do nothing.
+# If the $CHANGELOG_FILE exists and it has
+#     - been modified, do nothing. Presumably, PR reviewers will notice any mistakes.
+#     - not been modified, prompt the user if they would like to continue.
+#
+# @author matthew.greenfield@opower.com
+#
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-CHANGELOG_FILENAME=$(ls $GIT_ROOT | grep -i -E '(release|changelog|changes)' )
+CHANGELOG_FILENAME=$(ls $GIT_ROOT | grep -i -E '(release.?notes?|changes?.?log|changelog|changes)' )
 CHANGELOG_FILE="$GIT_ROOT/$CHANGELOG_FILENAME"
 
 if [ "$CHANGELOG_FILENAME" == "" ]; then
