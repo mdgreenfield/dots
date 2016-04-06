@@ -13,5 +13,8 @@ BRANCH_NAME="${BRANCH_NAME##*/}"
 # If the branch name uses '_', that's ok, we'll change it to '-' in the message.
 echo $BRANCH_NAME | grep -i -E '^([A-Z]{2,}[-_][0-9]+\n?|NO-REF)$' > /dev/null 2>&1
 if [ $? -eq 0 ]; then
-  sed -i.bak -e "1s/^/$BRANCH_NAME/" -e "1s/_/-/" $1
+  grep $BRANCH_NAME $1 > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    sed -i.bak -e "1s/^/$BRANCH_NAME/" -e "1s/_/-/" $1
+  fi
 fi

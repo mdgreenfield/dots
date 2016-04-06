@@ -29,10 +29,10 @@
     alias = !sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -
 
     # Delete all remote branches that have been merged. Excluding master and jenkins.
-    cr = !git branch -r --merged origin | grep -E '^[[:space:]]*origin' | grep -v -E 'master|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
+    cr = !git branch -r --merged origin | grep -E '^[[:space:]]\\*origin' | grep -v -E 'master|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
 
     # Delete all loacl branches that have been merged. Excluding the current branch and master.
-    cl = !git branch --merged | grep -v -E '*|master' | xargs git branch -d
+    cl = !git branch --merged | grep -v -E '\\*|master' | xargs git branch -d
 
     ctags = !.git/hooks/ctags
     b = browse
@@ -42,11 +42,12 @@
 [core]
     excludesfile = /Users/mgreenfield/.gitignore
     autocrlf = false
+    ignorecase = true
 [diff]
     # For Github-style word diffs
     wordRegex = [^[:space:]]
 [init]
     # Set a template directory for all git repos
-    templatedir = ~/.git_template
+    templateDir = ~/.git_template
 [filter "trimWhitespace"]
     clean = git-stripspace
