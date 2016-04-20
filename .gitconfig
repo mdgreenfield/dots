@@ -40,7 +40,7 @@
 [rerere]
     enabled = true
 [core]
-    excludesfile = /Users/mgreenfield/.gitignore
+    excludesfile = ~/.gitignore
     autocrlf = false
     ignorecase = true
 [diff]
