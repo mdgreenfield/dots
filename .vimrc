@@ -40,6 +40,12 @@ set backspace=indent,eol,start
 "Informative status line if for some reason https://github.com/bling/vim-airline is not installed
 "set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
+" Syntastic settings
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 "Set color scheme
 colorscheme desert256v2
 
