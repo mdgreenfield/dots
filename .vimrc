@@ -8,6 +8,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " Set line numbers
 set number
+set relativenumber
 
 set title
 set ruler
