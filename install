@@ -5,11 +5,9 @@ cp ~/dots/.gitignore ~/.gitignore
 cp ~/dots/.irbrc ~/.irbrc
 cp ~/dots/.my.cnf ~/.my.cnf
 
-mkdir -p ~/.vim/autoload ~/.vim/bundle
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-
-cp ~/dots/.vim/update_bundles ~/.vim/update_bundles
-~/.vim/update_bundles
+rm -rf ~/.vim/
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+vim +PluginInstall +qall
 
 cd ~
 # Download git-autocomplete
