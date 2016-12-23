@@ -5,6 +5,9 @@ cp ~/dots/.gitignore ~/.gitignore
 cp ~/dots/.irbrc ~/.irbrc
 cp ~/dots/.my.cnf ~/.my.cnf
 
+mkdir -p ~/.rbenv
+cp ~/dots/.rbenv/version ~/.rbenv/version
+
 rm -rf ~/.vim/
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
