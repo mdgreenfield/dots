@@ -156,5 +156,6 @@ command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 
 """""" PLUGING SETTINGS
 :nnoremap \e :NERDTreeToggle<CR>
+let NERDTreeShowHidden=1
 
 :nnoremap ; :CtrlPBuffer<CR>
