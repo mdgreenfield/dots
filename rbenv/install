@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+DEFAULT_RUBY_VERSION=2.3.3
+
+# Requires brew to have installed rbenv and ruby-build
+mkdir -p ~/.rbenv
+echo "$DEFAULT_RUBY_VERSION" >> ~/.rbenv/version
+
+echo 'export PATH="~/.rbenv/bin:~/.rbenv/shims:$PATH"' >> ~/.profile
+echo 'eval "$(rbenv init -)"' >> ~/.profile
+
+RBENV_DEFAULT_GEMS_PATH="$(rbenv root)/plugins/rbenv-default-gems"
+rm -rf "$RBENV_DEFAULT_GEMS_PATH"
+git clone https://github.com/rbenv/rbenv-default-gems.git "$(rbenv root)/plugins/rbenv-default-gems"
+
+DEFAULT_GEMS_PATH="$(rbenv root)/default-gems"
+rm "$DEFAULT_GEMS_PATH"
+echo bundler >> "$DEFAULT_GEMS_PATH"
+echo gem-ctags >> "$DEFAULT_GEMS_PATH"
+
+rbenv install "$DEFAULT_RUBY_VERSION"
