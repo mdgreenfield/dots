@@ -10,8 +10,11 @@ DEFAULT_RUBY_VERSION=2.3.3
 mkdir -p ~/.rbenv
 echo "$DEFAULT_RUBY_VERSION" >> ~/.rbenv/version
 
-echo 'export PATH="~/.rbenv/bin:~/.rbenv/shims:$PATH"' >> ~/.profile
-echo 'eval "$(rbenv init -)"' >> ~/.profile
+RBENV_EXPORT='export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"'
+if ! grep -q $RBENV_EXPORT "$HOME/.profile" ; then
+  echo $RBENV_EXPORT >> ~/.profile
+  echo 'eval "$(rbenv init -)"' >> ~/.profile
+fi
 
 RBENV_DEFAULT_GEMS_PATH="$(rbenv root)/plugins/rbenv-default-gems"
 rm -rf "$RBENV_DEFAULT_GEMS_PATH"
