@@ -1,0 +1,22 @@
+brew 'bash'
+brew 'bash-completion'
+brew 'ctags'
+brew 'curl', args: ['with-openssl']
+brew 'git'
+brew 'graphviz'
+brew 'htop'
+brew 'hub'
+brew 'jq'
+brew 'nmap'
+brew 'openconnect'
+brew 'parallel'
+brew 'pssh'
+brew 'pv'
+brew 'rbenv'
+brew 'ruby-build'
+brew 'shellcheck'
+brew 'the_silver_searcher'
+brew 'vim', args: ['with-custom-ruby', 'with-override-system-vi']
+brew 'watch'
+brew 'wget'
+
