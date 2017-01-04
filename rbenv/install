@@ -8,20 +8,24 @@ DEFAULT_RUBY_VERSION=2.3.3
 
 # Requires brew to have installed rbenv and ruby-build
 mkdir -p ~/.rbenv
-echo "$DEFAULT_RUBY_VERSION" >> ~/.rbenv/version
+echo "$DEFAULT_RUBY_VERSION" > ~/.rbenv/version
 
 RBENV_EXPORT='export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"'
-if ! grep -q $RBENV_EXPORT "$HOME/.profile" ; then
-  echo $RBENV_EXPORT >> ~/.profile
+if ! grep -q "$RBENV_EXPORT" "$HOME/.profile" ; then
+  echo "$RBENV_EXPORT" >> ~/.profile
   echo 'eval "$(rbenv init -)"' >> ~/.profile
 fi
 
 RBENV_DEFAULT_GEMS_PATH="$(rbenv root)/plugins/rbenv-default-gems"
-rm -rf "$RBENV_DEFAULT_GEMS_PATH"
-git clone https://github.com/rbenv/rbenv-default-gems.git "$(rbenv root)/plugins/rbenv-default-gems"
+if [ -d "$RBENV_DEFAULT_GEMS_PATH" ]; then
+  rm -rf "$RBENV_DEFAULT_GEMS_PATH"
+fi
+git clone https://github.com/rbenv/rbenv-default-gems.git "$RBENV_DEFAULT_GEMS_PATH"
 
 DEFAULT_GEMS_PATH="$(rbenv root)/default-gems"
-rm "$DEFAULT_GEMS_PATH"
+if [ -d "$DEFAULT_GEMS_PATH" ]; then
+  rm "$DEFAULT_GEMS_PATH"
+fi
 echo bundler >> "$DEFAULT_GEMS_PATH"
 echo gem-ctags >> "$DEFAULT_GEMS_PATH"
 
