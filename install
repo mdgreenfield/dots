@@ -4,7 +4,6 @@ set -e
 set -u
 set -o pipefail
 
-cp ~/dots/.irbrc ~/.irbrc
 cp ~/dots/.my.cnf ~/.my.cnf
 
 # Install vim (brew managed vim recommended to get a recent version)
