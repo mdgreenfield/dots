@@ -4,7 +4,7 @@ set -e
 set -u
 set -o pipefail
 
-DEFAULT_RUBY_VERSION=2.3.3
+DEFAULT_RUBY_VERSION=2.4.1
 
 # Requires brew to have installed rbenv and ruby-build
 mkdir -p ~/.rbenv
