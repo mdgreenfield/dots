@@ -51,3 +51,5 @@
     templateDir = ~/.git_template
 [filter "trimWhitespace"]
     clean = git-stripspace
+[advice]
+	ignoredHook = false
