@@ -4,6 +4,9 @@ source ~/git-prompt.sh
 export EDITOR=vim
 export GIT_TEMPLATE_DIR=~/dots/.git_template
 export HISTIGNORE="$HISTIGNORE:history*"
+export HISTSIZE=20000
+export HISTFILESIZE=20000
+shopt -s histappend
 
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
