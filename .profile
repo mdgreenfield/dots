@@ -1,25 +1,28 @@
-source ~/git-completion.bash
-source ~/git-prompt.sh
+alias sp="source ~/.profile"
 
 export EDITOR=vim
-export GIT_TEMPLATE_DIR=~/dots/.git_template
 export HISTIGNORE="$HISTIGNORE:history*"
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups
 shopt -s histappend
 
-PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+set -o vi
+set show-mode-in-prompt on
+PS1='[\u@\h \W$(__git_ps1 " (%s)")]\m\$ '
 
-alias git=hub
-alias g='git'
 alias vi='vim'
+alias ll="ls -al"
+
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 # Autocomplete for 'g' as well
+alias git=hub
+alias g='git'
 complete -o default -o nospace -F _git g
 
-alias sp="source ~/.profile"
-alias ll="ls -al"
+source ~/git-completion.bash
+source ~/git-prompt.sh
 
 function fast_grep() { find . -type f | parallel -k -j150% -n 1000 -m grep -H -n "${1}" {}; }
 
@@ -100,6 +103,6 @@ if [ -z $NO_SVN_PROMPT ]; then
     export PROMPT_COMMAND=spwd
 fi
 
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+  tmux attach -t default || tmux new -s default
 fi

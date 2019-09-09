@@ -38,6 +38,7 @@ Plugin 'git://github.com/flazz/vim-colorschemes.git'
 Plugin 'https://github.com/vim-syntastic/syntastic.git'
 Plugin 'https://github.com/bkad/CamelCaseMotion.git'
 Plugin 'https://github.com/vim-scripts/argtextobj.vim'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " plugins from http://vim-scripts.org/vim/scripts.html
 Plugin 'IndexedSearch'
@@ -62,9 +63,15 @@ syntax on
 " Remove all trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
 
+set nowrap!
+
 " Set line numbers
 set number
-set relativenumber
+"set relativenumber
+
+set ttymouse=xterm2
+set mouse=a
+
 
 set title
 set ruler
@@ -94,6 +101,9 @@ autocmd Filetype md setlocal spell
 
 set backspace=indent,eol,start
 
+set splitbelow
+set splitright
+
 "Informative status line if for some reason https://github.com/bling/vim-airline is not installed
 "set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
@@ -102,6 +112,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+set t_Co=256
 
 "Set color scheme
 silent! colorscheme desert256v2
