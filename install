@@ -9,6 +9,7 @@ cp ~/dots/.my.cnf ~/.my.cnf
 # Install vim (brew managed vim recommended to get a recent version)
 rm -rf ~/.vim/
 cp ~/dots/.vimrc ~/.vimrc
+cp ~/dots/.tmux.conf ~/.tmux.conf
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
 
