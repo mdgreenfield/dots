@@ -169,3 +169,12 @@ command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 let NERDTreeShowHidden=1
 
 :nnoremap ; :CtrlPBuffer<CR>
+
+" yank to clipboard
+if has("clipboard")
+  set clipboard=unnamed " copy to the system clipboard
+
+  if has("unnamedplus") " X11 support
+    set clipboard+=unnamedplus
+  endif
+endif
