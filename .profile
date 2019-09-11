@@ -7,8 +7,6 @@ export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups
 shopt -s histappend
 
-set -o vi
-set show-mode-in-prompt on
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\m\$ '
 
 alias vi='vim'
@@ -106,3 +104,6 @@ fi
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   tmux attach -t default || tmux new -s default
 fi
+
+# Do not automatically quit bash when C-d is pressed
+set -o ignoreeof

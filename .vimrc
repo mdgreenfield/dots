@@ -33,10 +33,10 @@ Plugin 'git://github.com/vim-scripts/Gist.vim.git'
 Plugin 'git://github.com/kien/ctrlp.vim.git'
 Plugin 'git://github.com/airblade/vim-gitgutter'
 Plugin 'git://github.com/flazz/vim-colorschemes.git'
-Plugin 'https://github.com/vim-syntastic/syntastic.git'
 Plugin 'https://github.com/bkad/CamelCaseMotion.git'
 Plugin 'https://github.com/vim-scripts/argtextobj.vim'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'dense-analysis/ale'
 
 " plugins from http://vim-scripts.org/vim/scripts.html
 Plugin 'IndexedSearch'
