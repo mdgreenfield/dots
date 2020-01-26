@@ -30,7 +30,6 @@ Plugin 'git://github.com/majutsushi/tagbar'
 "  "git://github.com/tsaleh/vim-tcomment.git'
 Plugin 'git://github.com/vim-ruby/vim-ruby.git'
 Plugin 'git://github.com/vim-scripts/Gist.vim.git'
-Plugin 'git://github.com/kien/ctrlp.vim.git'
 Plugin 'git://github.com/airblade/vim-gitgutter'
 Plugin 'git://github.com/flazz/vim-colorschemes.git'
 Plugin 'https://github.com/bkad/CamelCaseMotion.git'
@@ -105,12 +104,6 @@ set splitright
 "Informative status line if for some reason https://github.com/bling/vim-airline is not installed
 "set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
-" Syntastic settings
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
 set t_Co=256
 
 "Set color scheme
@@ -136,7 +129,7 @@ silent! colorscheme desert256v2
 :nnoremap \M :set noexpandtab tabstop=8 softtabstop=4 shiftwidth=4<CR>
 :nnoremap \m :set expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 
-set wildignore+=.hg,.git,.svn " Version Controls"
+set wildignore+=.hg,.git,.svn "Version Control files"
 set wildignore+=*.sw? "Vim swap files"
 set wildignore+=*.DS_Store "OSX specific"
 set wildignore+=*.class "java/scala class files"
@@ -178,3 +171,13 @@ if has("clipboard")
     set clipboard+=unnamedplus
   endif
 endif
+
+" Load fzf (installed using Homebrew)
+set rtp+=/usr/local/opt/fzf
+
+" Unset paste on InsertLeave
+augroup unset_paste
+  autocmd!
+  autocmd InsertLeave * silent! set nopaste
+augroup END
+

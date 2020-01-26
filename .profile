@@ -2,9 +2,9 @@ alias sp="source ~/.profile"
 
 export EDITOR=vim
 export HISTIGNORE="$HISTIGNORE:history*"
-export HISTSIZE=20000
-export HISTFILESIZE=20000
-export HISTCONTROL=ignoredups
+export HISTSIZE=40000
+export HISTFILESIZE=40000
+export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\m\$ '
@@ -12,7 +12,8 @@ PS1='[\u@\h \W$(__git_ps1 " (%s)")]\m\$ '
 alias vi='vim'
 alias ll="ls -al"
 
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d"
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 
 # Autocomplete for 'g' as well
 alias git=hub
@@ -107,3 +108,7 @@ fi
 
 # Do not automatically quit bash when C-d is pressed
 set -o ignoreeof
+
+# Configure fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
