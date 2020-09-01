@@ -4,21 +4,39 @@ set -e
 set -u
 set -o pipefail
 
-cp ~/dots/.my.cnf ~/.my.cnf
+echo 'Installing zsh configuration'
+#mkdir -p ~/.zsh/
+#cp ~/dots/.zshrc ~/.zshrc
 
-# Install vim (brew managed vim recommended to get a recent version)
-rm -rf ~/.vim/
-cp ~/dots/.vimrc ~/.vimrc
+echo 'Installing oh-my-zsh'
+curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh > /tmp/install.sh
+sh /tmp/install.sh --unattended
+cp -r ~/dots/oh-my-zsh ~/.oh-my-zsh/custom/
+
+echo 'Installing tmux configuration'
 cp ~/dots/.tmux.conf ~/.tmux.conf
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-vim +PluginInstall +qall
 
-# Install Git configuration
+echo 'Installing alacritty configuration'
+cp ~/dots/.alacritty.yml ~/.alacritty.yml
+
+echo 'Installing gitignore'
 cd ~
+rm ~/.gitignore
 cp ~/dots/.gitignore ~/.gitignore
+
 echo 'Installing Git Completion'
 curl -s https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL -o ~/git-completion.bash
+curl -s https://github.com/git/git/raw/master/contrib/completion/git-completion.zsh -OL -o ~/.zsh/git-completion.zsh
 
 echo 'Installing Git Prompt'
 curl -s https://github.com/git/git/raw/master/contrib/completion/git-prompt.sh -OL -o ~/git-prompt.sh
+
+echo 'Installing vim'
+rm -rf ~/.vim/
+cp ~/dots/.vimrc ~/.vimrc
+git clone --quiet https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+vim +PluginInstall +qall
+
+echo 'Installing MySQL client configuration'
+cp ~/dots/.my.cnf ~/.my.cnf
 
