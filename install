@@ -20,23 +20,23 @@ rm -rf ${ZSH_CUSTOM:-~/.oh-my-zsh/custom/}
 git clone --quiet https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-echo 'Installing tmux configuration'
+echo 'Configuring tmux'
 cp ~/dots/.tmux.conf ~/.tmux.conf
 
-echo 'Installing alacritty configuration'
+echo 'Configuring alacritty'
 cp ~/dots/.alacritty.yml ~/.alacritty.yml
 
-echo 'Installing gitignore'
+echo 'Configuring git'
 cd ~
 rm ~/.gitignore
 cp ~/dots/.gitignore ~/.gitignore
 
-echo 'Installing vim'
+echo 'Configuring vim'
 rm -rf ~/.vim/
 cp ~/dots/.vimrc ~/.vimrc
 git clone --quiet https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
 
-echo 'Installing MySQL client configuration'
+echo 'Configuring MySQL'
 cp ~/dots/.my.cnf ~/.my.cnf
 
