@@ -4,31 +4,24 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'git://github.com/bling/vim-airline'
 Plugin 'git://github.com/mkitt/tabline.vim'
-Plugin 'git://github.com/ervandew/supertab.git'
-"  "git://github.com/godlygeek/tabular.git'
-Plugin 'git://github.com/depuracao/vim-rdoc.git'
+Plugin 'git://github.com/lifepillar/vim-mucomplete'
 Plugin 'git://github.com/scrooloose/nerdtree.git'
-"  "git://github.com/timcharper/textile.vim.git'
 Plugin 'git://github.com/tpope/vim-fugitive.git'
 Plugin 'git://github.com/tpope/vim-git.git'
-Plugin 'git://github.com/tpope/vim-haml.git'
 Plugin 'git://github.com/tpope/vim-markdown.git'
 Plugin 'git://github.com/tpope/vim-repeat.git'
 Plugin 'git://github.com/tpope/vim-surround.git'
 Plugin 'git://github.com/tpope/vim-vividchalk.git'
 Plugin 'git://github.com/majutsushi/tagbar'
-"  "git://github.com/tsaleh/taskpaper.vim.git'
-"  "git://github.com/tsaleh/vim-matchit.git'
-"  "git://github.com/tsaleh/vim-tcomment.git'
+Plugin 'git://github.com/fatih/vim-go' " need to run :GoInstallBinaries
 Plugin 'git://github.com/vim-ruby/vim-ruby.git'
+Plugin 'git://github.com/depuracao/vim-rdoc.git'
 Plugin 'git://github.com/vim-scripts/Gist.vim.git'
 Plugin 'git://github.com/airblade/vim-gitgutter'
 Plugin 'git://github.com/flazz/vim-colorschemes.git'
@@ -36,13 +29,12 @@ Plugin 'https://github.com/bkad/CamelCaseMotion.git'
 Plugin 'https://github.com/vim-scripts/argtextobj.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'dense-analysis/ale'
-
-" plugins from http://vim-scripts.org/vim/scripts.html
 Plugin 'IndexedSearch'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -87,14 +79,16 @@ set smartcase
 set hlsearch
 :nnoremap \q :nohlsearch<CR>
 
-autocmd FileType * set tabstop=4|set softtabstop=4|set shiftwidth=4|set expandtab|set autoindent
-autocmd FileType ruby setlocal tabstop=2|set softtabstop=2|set shiftwidth=2|set expandtab|set autoindent
-autocmd FileType yaml setlocal tabstop=2|set softtabstop=2|set shiftwidth=2|set expandtab|set autoindent
-autocmd FileType haml setlocal tabstop=2|set softtabstop=2|set shiftwidth=2|set expandtab|set autoindent
-autocmd FileType scss setlocal tabstop=2|set softtabstop=2|set shiftwidth=2|set expandtab|set autoindent
+autocmd FileType * set tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent
+autocmd FileType ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+autocmd FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+autocmd FileType haml setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+autocmd FileType scss setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+autocmd Filetype go setlocal tabstop=4 softtabstop=0 noexpandtab
 
 autocmd Filetype gitcommit setlocal spell
 autocmd Filetype md setlocal spell
+autocmd Filetype txt setlocal spell
 
 set backspace=indent,eol,start
 
@@ -181,3 +175,23 @@ augroup unset_paste
   autocmd InsertLeave * silent! set nopaste
 augroup END
 
+" Plugin vim-mucomplete
+set completeopt+=menuone
+set completeopt+=noselect
+set shortmess+=c
+set belloff+=ctrlg
+let g:mucomplete#enable_auto_at_startup = 1
+
+" Go syntax highlighting
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+
+" Auto formatting and importing
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
+
+" Status line types/signatures
+let g:go_auto_type_info = 1
