@@ -13,7 +13,7 @@ else
 fi
 
 echo 'Configuring oh-my-zsh'
-rm ~/.zshrc
+rm ~/.zshrc || true
 cp ~/dots/.zshrc ~/.zshrc
 
 rm -rf ${ZSH_CUSTOM:-~/.oh-my-zsh/custom/}
@@ -29,7 +29,7 @@ cp ~/dots/.alacritty.yml ~/.alacritty.yml
 
 echo 'Configuring git'
 cd ~
-rm ~/.gitignore
+rm ~/.gitignore || true
 cp ~/dots/.gitignore ~/.gitignore
 
 echo 'Configuring vim'
