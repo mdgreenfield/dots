@@ -53,3 +53,8 @@
     clean = git-stripspace
 [advice]
 	ignoredHook = false
+[tag]
+    forceSignAnnotated = false
+    sort = -version:refname
+[versionsort]
+    suffix = -
