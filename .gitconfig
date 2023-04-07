@@ -49,6 +49,7 @@
 [init]
     # Set a template directory for all git repos
     templateDir = ~/.git_template
+    defaultBranch = main
 [filter "trimWhitespace"]
     clean = git-stripspace
 [advice]
