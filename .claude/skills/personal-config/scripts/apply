@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# apply - Copy dots configs to ~ and report what changed
+set -euo pipefail
+
+DOTS="$HOME/dots"
+CHANGED=0
+
+apply() {
+  local src="$DOTS/$1" dst="$HOME/$2" mode="${3:-}"
+  if [ ! -f "$src" ]; then return; fi
+  if ! diff -q "$src" "$dst" &>/dev/null 2>&1; then
+    cp "$src" "$dst"
+    [ -n "$mode" ] && chmod "$mode" "$dst"
+    echo "applied: $2"
+    CHANGED=$((CHANGED + 1))
+  fi
+}
+
+apply .zshrc        .zshrc
+apply .vimrc        .vimrc
+apply .tmux.conf    .tmux.conf
+apply .gitignore    .gitignore
+# .gitconfig intentionally excluded: it has no [user] block.
+# Manage git identity separately: git config --global user.name/user.email
+apply .alacritty.toml .alacritty.toml
+apply .my.cnf       .my.cnf
+apply .ssh/config   .ssh/config 600
+
+if [ $CHANGED -eq 0 ]; then
+  echo "all configs up to date"
+else
+  echo ""
+  echo "$CHANGED file(s) applied — reload your shell: source ~/.zshrc"
+fi

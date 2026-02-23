@@ -1,6 +1,6 @@
 ---
 name: personal-config
-description: Manage and improve personal terminal configuration stored in ~/dots. Use when asked to update shell aliases, vim config, tmux settings, git config, SSH config, Brewfile packages, or anything related to dotfiles. Handles editing configs, applying them to the live environment, and committing changes to the ~/dots git repo.
+description: Manage and improve personal terminal configuration stored in ~/dots. Use when asked to update shell aliases, vim config, tmux settings, git config, SSH config, Brewfile packages, agent instructions, or anything related to dotfiles. Handles editing configs, applying them to the live environment, and committing changes to the ~/dots git repo.
 compatibility: Designed for Claude Code on macOS. Requires git, zsh, vim, tmux, brew.
 allowed-tools: Bash Read Write Edit Glob Grep
 ---
@@ -9,35 +9,28 @@ allowed-tools: Bash Read Write Edit Glob Grep
 
 Dotfiles live in `~/dots` (a git repo synced to GitHub). Changes must be:
 1. Edited in `~/dots`
-2. Applied to `~` (copied or sourced)
+2. Applied to `~` (use the apply script)
 3. Committed and optionally pushed
 
 ## Deployment Model
 
 Config files are **copies**, not symlinks. `~/dots/` is the source of truth.
 
-> ⚠️ If you edit a config directly in `~` (e.g. `~/.zshrc`), those changes will be **lost** the next time `install` runs. Always edit in `~/dots/` first, then apply.
+> ⚠️ If you edit a config directly in `~` (e.g. `~/.zshrc`), those changes will be **lost** the next time `install` or `apply` runs. Always edit in `~/dots/` first, then apply.
 
-**Exception:** `~/.claude/skills` is a symlink → `~/dots/.claude/skills`. Changes to skills take effect immediately without any copy step.
+**Exceptions (symlinks — changes take effect immediately, no copy needed):**
+- `~/.claude/skills` → `~/dots/.claude/skills`
+- `~/AGENTS.md` → `~/dots/AGENTS.md`
 
 ## Quick Start
 
 ```bash
-# Edit a config
-edit ~/dots/.zshrc          # shell aliases, functions, env vars
-edit ~/dots/.vimrc          # vim plugins, keybindings, settings
-edit ~/dots/.tmux.conf      # tmux prefix, keybindings, plugins
-edit ~/dots/.gitconfig      # git aliases, color, behavior
-edit ~/dots/.alacritty.toml # terminal colors, font, window
+# 1. Edit a config in ~/dots
+# 2. Apply all configs at once:
+~/dots/.claude/skills/personal-config/scripts/apply
 
-# Apply a config
-cp ~/dots/.zshrc ~/.zshrc && source ~/.zshrc     # zsh (instant)
-cp ~/dots/.vimrc ~/.vimrc                         # vim (next launch)
-cp ~/dots/.tmux.conf ~/.tmux.conf                 # tmux: prefix+I to reload
-
-# Commit changes
-cd ~/dots && git add -p && git commit -m "config: <what changed>"
-git push
+# 3. Commit
+cd ~/dots && git add -p && git commit -m "config: <what changed>" && git push
 ```
 
 ## Current State
@@ -52,17 +45,26 @@ Recent commits:
 
 ## Config Files
 
-| File | Purpose | Apply command |
-|------|---------|---------------|
-| `.zshrc` | Shell: aliases, plugins, env, functions | `cp ~/dots/.zshrc ~/.zshrc && source ~/.zshrc` |
-| `.vimrc` | Vim: plugins (Vundle), keybindings | `cp ~/dots/.vimrc ~/.vimrc` |
-| `.tmux.conf` | Tmux: prefix=Ctrl+a, vi-mode, kube status | `cp ~/dots/.tmux.conf ~/.tmux.conf` |
-| `.gitconfig` | Git: aliases, colors, rerere | `cp ~/dots/.gitconfig ~/.gitconfig` |
-| `.alacritty.toml` | Alacritty terminal: colors (Tango), black bg, green fg | `cp ~/dots/.alacritty.toml ~/.alacritty.toml` |
-| `.gitignore` | Global gitignore | `cp ~/dots/.gitignore ~/.gitignore` |
-| `.my.cnf` | MySQL client: charset, engine, prompt | `cp ~/dots/.my.cnf ~/.my.cnf` |
+| File | Purpose | Notes |
+|------|---------|-------|
+| `.zshrc` | Shell: aliases, plugins, env, functions | Sourced by apply |
+| `.vimrc` | Vim: plugins (Vundle), keybindings | |
+| `.tmux.conf` | Tmux: prefix=Ctrl+a, vi-mode, kube status | |
+| `.gitconfig` | Git: aliases, colors, rerere | ⚠️ excluded from apply (no `[user]` block — would wipe identity) |
+| `.alacritty.toml` | Alacritty terminal: Tango colors, black bg, green fg | |
+| `.gitignore` | Global gitignore | |
+| `.my.cnf` | MySQL client: charset, engine, prompt | |
+| `.ssh/config` | SSH: keychain, multiplexing, keepalive | apply sets chmod 600 |
 | `brew/Brewfile` | Homebrew packages | `brew bundle --file=~/dots/brew/Brewfile` |
-| `.ssh/config` | SSH: keychain, multiplexing, keepalive | `cp ~/dots/.ssh/config ~/.ssh/config && chmod 600 ~/.ssh/config` |
+| `AGENTS.md` | Agent instructions (GitHub, PR style) | Symlinked; edit in dots, takes effect immediately |
+
+## Symlinks
+
+| Symlink | Points to | Notes |
+|---------|-----------|-------|
+| `~/.claude/skills` | `~/dots/.claude/skills` | Skills take effect immediately |
+| `~/AGENTS.md` | `~/dots/AGENTS.md` | Agent instructions for all tools |
+| `~/.claude/CLAUDE.md` loads | `~/dots/AGENTS.md` | Via `@~/dots/AGENTS.md` include |
 
 ## Key Config Details
 
@@ -90,18 +92,22 @@ Recent commits:
 - Key aliases: `lol` (log graph), `co` (checkout), `st` (status), `cr`/`cl` (branch cleanup)
 - rerere enabled, color ui auto
 
+### Agent Instructions (`AGENTS.md`)
+- Always use `gh` CLI for GitHub interactions
+- PR/commit style: Jira prefix, imperative mood, 50-char subject, 72-char body wrap
+- Loaded by Claude Code globally via `~/.claude/CLAUDE.md`
+- Portable to Cursor, Codex, and other AGENTS.md-compatible tools
+
 ## Common Tasks
 
 ### Add a shell alias
+Edit `~/dots/.zshrc`, then:
 ```bash
-# Add to the aliases section in .zshrc
-echo "\nalias <name>='<command>'" >> ~/dots/.zshrc
-# Then apply:
-cp ~/dots/.zshrc ~/.zshrc && source ~/.zshrc
+~/dots/.claude/skills/personal-config/scripts/apply
 ```
 
 ### Add a shell function
-Edit `~/dots/.zshrc` and add the function after the existing `jwt-dump()` function.
+Edit `~/dots/.zshrc`, add after the existing `jwt-dump()` function, then run apply.
 
 ### Add a Vim plugin
 Edit `~/dots/.vimrc`, add `Plugin 'author/repo'` in the Vundle block, then:
@@ -115,28 +121,29 @@ echo 'brew "<package>"' >> ~/dots/brew/Brewfile
 brew install <package>
 ```
 
-### Full reinstall on a new machine
+### Update agent instructions
+Edit `~/dots/AGENTS.md` — changes are live immediately via the symlink.
+
+### Full setup on a new machine
 ```bash
-cd ~/dots && bash install
+# 1. Clone and run install
+git clone <repo> ~/dots && cd ~/dots && bash install
 brew bundle --file=~/dots/brew/Brewfile
+
+# 2. Set up symlinks
+ln -sf ~/dots/.claude/skills ~/.claude/skills
+ln -sf ~/dots/AGENTS.md ~/AGENTS.md
+echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md
 ```
-
-## Symlinks
-
-| Symlink | Points to | Notes |
-|---------|-----------|-------|
-| `~/.claude/skills` | `~/dots/.claude/skills` | Skills take effect immediately; no copy needed |
-
-All other config files (`~/.zshrc`, `~/.vimrc`, etc.) are **copies** deployed by `~/dots/install`.
 
 ## Committing Changes
 
 ```bash
 cd ~/dots
-git diff                          # review changes
-git add <file>                    # stage specific files
-git commit -m "config: <summary>" # commit
-git push                          # push to GitHub
+git diff                           # review changes
+git add <file>                     # stage specific files
+git commit -m "config: <summary>"  # commit
+git push                           # push to GitHub
 ```
 
 Commit message convention: `config: <what changed>` (e.g. `config: add k alias for kubectl`)
