@@ -16,6 +16,7 @@ brew 'rbenv'
 brew 'ruby-build'
 brew 'shellcheck'
 brew 'the_silver_searcher'
+brew 'tmux'
 brew 'vim', args: ['with-custom-ruby', 'with-override-system-vi']
 brew 'watch'
 brew 'wget'
