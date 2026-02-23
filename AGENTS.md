@@ -1,5 +1,15 @@
 # Agent Instructions
 
+## Repository Locations
+
+Most work repositories live under `~/dd`. Exceptions:
+- `~/dots` — personal dotfiles (ad-hoc, not a work repo)
+- Repos cloned for upstream contribution (typically in `~/` or a
+  separate directory, not `~/dd`)
+
+When searching for a repo or navigating to one by name, default to
+looking under `~/dd` first.
+
 ## GitHub
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
