@@ -36,6 +36,11 @@ or seams in production code, first try to refactor the code to make
 it naturally testable. Only skip tests in rare cases where no
 reasonable refactor can avoid test-only hooks.
 
+All applicable tests must be run and pass before committing. Check
+for a Makefile and run all relevant targets (e.g. `make test`). If a
+linter is available, run it too (e.g. `make lint`) and resolve any
+issues before committing.
+
 ## Code Style
 
 Write code that is concise and easy for a reviewer to follow. Code
