@@ -94,6 +94,7 @@ Recent commits:
 
 ### Agent Instructions (`AGENTS.md`)
 - Always use `gh` CLI for GitHub interactions
+- Branch format: `mdgreenfield/<feature-or-ticket>`
 - PR/commit style: Jira prefix, imperative mood, 50-char subject, 72-char body wrap
 - Loaded by Claude Code globally via `~/.claude/CLAUDE.md`
 - Portable to Cursor, Codex, and other AGENTS.md-compatible tools
@@ -138,12 +139,23 @@ echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md
 
 ## Committing Changes
 
+Commit message convention: `config: <what changed>` (e.g. `config: add k alias for kubectl`)
+
 ```bash
 cd ~/dots
-git diff                           # review changes
-git add <file>                     # stage specific files
-git commit -m "config: <summary>"  # commit
-git push                           # push to GitHub
+git add <file>
+git commit -m "config: <summary>"
+git push
 ```
 
-Commit message convention: `config: <what changed>` (e.g. `config: add k alias for kubectl`)
+### Gotchas
+
+**SSH remote** — ensure the remote uses SSH, not HTTPS:
+```bash
+git remote set-url origin git@github.com:mdgreenfield/dots.git
+```
+
+**First push on a new clone** — set upstream tracking:
+```bash
+git push --set-upstream origin main
+```
