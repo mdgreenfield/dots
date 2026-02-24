@@ -31,10 +31,10 @@ This applies to commit messages and any other text passed via heredoc.
 ## Testing
 
 Tests are a priority for any fix or new functionality. Write tests
-first where possible (TDD). Tests should only be skipped in rare
-cases where the only way to make code testable requires adding
-test-only hooks or seams into production code that would not
-otherwise exist.
+first where possible (TDD). If adding tests requires test-only hooks
+or seams in production code, first try to refactor the code to make
+it naturally testable. Only skip tests in rare cases where no
+reasonable refactor can avoid test-only hooks.
 
 ## Code Style
 
