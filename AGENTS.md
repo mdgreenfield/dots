@@ -14,6 +14,14 @@ looking under `~/dd` first.
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
 
+## Git Branches
+
+Always name branches using the format `mdgreenfield/<name_of_feature_or_jira_ticket_number>`.
+
+Examples:
+- `mdgreenfield/JIRA-1234`
+- `mdgreenfield/add-rate-limit-metrics`
+
 ## Git / Pull Requests
 
 When creating or editing a pull request description, always follow this template:
