@@ -28,6 +28,14 @@ EOF
 
 This applies to commit messages and any other text passed via heredoc.
 
+## Testing
+
+Tests are a priority for any fix or new functionality. Write tests
+first where possible (TDD). Tests should only be skipped in rare
+cases where the only way to make code testable requires adding
+test-only hooks or seams into production code that would not
+otherwise exist.
+
 ## Code Style
 
 Write code that is concise and easy for a reviewer to follow. Code
@@ -49,9 +57,9 @@ Examples:
 ## Git Commit Messages / GitHub Pull Requests
 
 Commit messages and pull request descriptions should be clear and
-concise. The subject line should summarize the change in plain
-language so a reviewer can understand it at a glance without reading
-the diff.
+concise and not just restate what the code does. The subject line
+should summarize the change in plain language so a reviewer can
+understand it at a glance without reading the diff.
 
 When creating or editing a pull request description, always follow this template:
 
@@ -61,7 +69,7 @@ When creating or editing a pull request description, always follow this template
 
 **Body:**
 
-More detailed explanatory text, if necessary. Wrap it to about 72
+More detailed explanatory text, *if necessary*. Wrap it to about 72
 characters or so. In some contexts, the first line is treated as the
 subject of the commit and the rest of the text as the body. The
 blank line separating the summary from the body is critical (unless
