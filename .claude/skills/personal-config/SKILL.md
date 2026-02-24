@@ -93,9 +93,13 @@ Recent commits:
 - rerere enabled, color ui auto
 
 ### Agent Instructions (`AGENTS.md`)
+- Repository locations: work repos under `~/dd`, exceptions: `~/dots`, upstream clones
 - Always use `gh` CLI for GitHub interactions
+- Shell heredocs: single-quoted `<<'EOF'` — do not escape backticks or `$`
+- Testing: TDD preferred, tests must pass before committing, run `make test`/`make lint`
+- Code style: concise, self-documenting, comments only for complex/caveat-heavy code
 - Branch format: `mdgreenfield/<feature-or-ticket>`
-- PR/commit style: Jira prefix, imperative mood, 50-char subject, 72-char body wrap
+- PR/commit style: clear and concise, Jira prefix, imperative mood, 50-char subject
 - Loaded by Claude Code globally via `~/.claude/CLAUDE.md`
 - Portable to Cursor, Codex, and other AGENTS.md-compatible tools
 
@@ -124,6 +128,13 @@ brew install <package>
 
 ### Update agent instructions
 Edit `~/dots/AGENTS.md` — changes are live immediately via the symlink.
+
+### Update gitconfig aliases
+`apply` skips `.gitconfig` to protect git identity. Apply alias changes manually:
+```bash
+git config --global alias.<name> '<value>'
+# or edit ~/.gitconfig directly, then copy the change back to ~/dots/.gitconfig
+```
 
 ### Full setup on a new machine
 ```bash
