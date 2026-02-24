@@ -14,6 +14,16 @@ looking under `~/dd` first.
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
 
+## Code Style
+
+Write code that is concise and easy for a reviewer to follow. Code
+should speak for itself — do not litter it with comments explaining
+what the code does. Reserve comments for:
+
+- Complex logic that isn't immediately obvious
+- Caveats, gotchas, or non-obvious constraints
+- Conditions or side effects that callers need to be aware of
+
 ## Git Branches
 
 Always name branches using the format `mdgreenfield/<name_of_feature_or_jira_ticket_number>`.
