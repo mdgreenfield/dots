@@ -48,6 +48,10 @@ Examples:
 
 ## Git Commit Messages / GitHub Pull Requests
 
+Commit messages should be clear and concise. The subject line should
+summarize the change in plain language so a reviewer can understand
+it at a glance without reading the diff.
+
 When creating or editing a pull request description, always follow this template:
 
 **Title**
