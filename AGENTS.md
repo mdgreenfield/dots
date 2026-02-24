@@ -22,7 +22,7 @@ Examples:
 - `mdgreenfield/JIRA-1234`
 - `mdgreenfield/add-rate-limit-metrics`
 
-## Git / Pull Requests
+## Git Commit Messages / GitHub Pull Requests
 
 When creating or editing a pull request description, always follow this template:
 
