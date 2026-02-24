@@ -11,20 +11,22 @@ Reflect on what you just did and make the tools and skills better.
 
 You just spent time working with skills, CLI tools, and scripts in this repo. Now step back and make them better—both the skills that guide you and the tools that do the work.
 
-## Your Scope: This Repo
+## Your Scope
 
-First, identify the repo you're working in:
+First, identify what to improve. Check if you're in a git repo:
 
 ```bash
-# Get repo root and name
-git rev-parse --show-toplevel
-basename "$(git rev-parse --show-toplevel)"
+git rev-parse --show-toplevel 2>/dev/null || echo "not a git repo"
 ```
 
-Focus on improving:
+**If in a git repo**, focus on:
 - Skills in this repo (`.claude/skills/` and `skills/` directories)
 - CLI tools in this repo (`dev/`, `scripts/`, and skill `scripts/` directories)
 - Documentation files like `CLAUDE.md` and `AGENTS.md`
+
+**If not in a git repo** (e.g., invoked from `~`), focus on:
+- Skills used in this session — check `~/.claude/skills/` and any symlinked skill repos
+- The skill(s) most recently invoked or discussed in the conversation
 
 ## Your Full Authority
 
