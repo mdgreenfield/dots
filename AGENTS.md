@@ -39,7 +39,7 @@ reasonable refactor can avoid test-only hooks.
 All applicable tests must be run and pass before committing. Check
 for a Makefile and run all relevant targets (e.g. `make test`). If a
 linter is available, run it too (e.g. `make lint`) and resolve any
-issues before committing.
+issues before committing. Make targets can be run in parallel.
 
 ## Code Style
 
