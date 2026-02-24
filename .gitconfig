@@ -27,7 +27,7 @@
     alias = !sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -
 
     # Delete all remote branches that have been merged. Excluding master, main, and jenkins.
-    cr = !git branch -r --merged origin | grep -E '^[[:space:]]\\*origin' | grep -v -E 'master|main|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
+    cr = !git branch -r --merged origin | grep -E '^[[:space:]]*origin' | grep -v -E 'master|main|jenkins' | cut -d'/' -f2 | xargs -n 1 -I{} git push origin :{}
 
     # Delete all local branches that have been merged. Excluding the current branch, master, and main.
     cl = !git branch --merged | grep -v -E '\\*|master|main' | xargs git branch -d
