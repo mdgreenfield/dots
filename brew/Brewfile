@@ -1,12 +1,12 @@
 brew 'bash'
 brew 'bash-completion@2'
 brew 'ctags'
-brew 'curl', args: ['with-openssl']
+brew 'curl'
 brew 'fzf'
 brew 'git'
 brew 'graphviz'
 brew 'htop'
-brew 'hub'
+brew 'gh'
 brew 'jq'
 brew 'nmap'
 brew 'parallel'
@@ -17,7 +17,7 @@ brew 'ruby-build'
 brew 'shellcheck'
 brew 'the_silver_searcher'
 brew 'tmux'
-brew 'vim', args: ['with-custom-ruby', 'with-override-system-vi']
+brew 'vim'
 brew 'watch'
 brew 'wget'
 

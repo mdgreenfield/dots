@@ -8,25 +8,25 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'https://github.com/bling/vim-airline'
-Plugin 'https://github.com/mkitt/tabline.vim'
-Plugin 'https://github.com/lifepillar/vim-mucomplete'
-Plugin 'https://github.com/scrooloose/nerdtree.git'
-Plugin 'https://github.com/tpope/vim-fugitive.git'
-Plugin 'https://github.com/tpope/vim-git.git'
-Plugin 'https://github.com/tpope/vim-markdown.git'
-Plugin 'https://github.com/tpope/vim-repeat.git'
-Plugin 'https://github.com/tpope/vim-surround.git'
-Plugin 'https://github.com/tpope/vim-vividchalk.git'
-Plugin 'https://github.com/majutsushi/tagbar'
-Plugin 'https://github.com/fatih/vim-go' " need to run :GoInstallBinaries
-Plugin 'https://github.com/vim-ruby/vim-ruby.git'
-Plugin 'https://github.com/depuracao/vim-rdoc.git'
-Plugin 'https://github.com/vim-scripts/Gist.vim.git'
-Plugin 'https://github.com/airblade/vim-gitgutter'
-Plugin 'https://github.com/flazz/vim-colorschemes.git'
-Plugin 'https://github.com/bkad/CamelCaseMotion.git'
-Plugin 'https://github.com/vim-scripts/argtextobj.vim'
+Plugin 'bling/vim-airline'
+Plugin 'mkitt/tabline.vim'
+Plugin 'lifepillar/vim-mucomplete'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-git'
+Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-vividchalk'
+Plugin 'majutsushi/tagbar'
+Plugin 'fatih/vim-go' " need to run :GoInstallBinaries
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'depuracao/vim-rdoc'
+Plugin 'vim-scripts/Gist.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'bkad/CamelCaseMotion'
+Plugin 'vim-scripts/argtextobj.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'dense-analysis/ale'
 Plugin 'IndexedSearch'
@@ -52,7 +52,7 @@ syntax on
 " Remove all trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
 
-set nowrap!
+set nowrap
 
 " Set line numbers
 set number
@@ -87,7 +87,7 @@ autocmd FileType scss setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab au
 autocmd Filetype go setlocal tabstop=4 softtabstop=0 noexpandtab
 
 autocmd Filetype gitcommit setlocal spell
-autocmd Filetype md setlocal spell
+autocmd Filetype markdown setlocal spell
 autocmd Filetype txt setlocal spell
 
 set backspace=indent,eol,start
@@ -130,17 +130,9 @@ set wildignore+=*.class "java/scala class files"
 set wildignore+=*/target/* "java/scala target directory"
 set wildignore+=*/.idea,*.iml "intellij droppings"
 
-" http://robots.thoughtbot.com/faster-grepping-in-vim/
 " The Silver Searcher
 if executable('ag')
-  " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
 endif
 
 " bind K to grep word under cursor
@@ -155,8 +147,6 @@ command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 :nnoremap \e :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
-:nnoremap ; :CtrlPBuffer<CR>
-
 " yank to clipboard
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard
@@ -167,7 +157,7 @@ if has("clipboard")
 endif
 
 " Load fzf (installed using Homebrew)
-set rtp+=/usr/local/opt/fzf
+execute 'set rtp+=' . trim(system('brew --prefix')) . '/opt/fzf'
 
 " Unset paste on InsertLeave
 augroup unset_paste
