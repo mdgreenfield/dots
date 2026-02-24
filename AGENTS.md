@@ -14,6 +14,20 @@ looking under `~/dd` first.
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
 
+## Shell Heredocs
+
+In single-quoted heredocs (`<<'EOF'`), the shell treats all content literally.
+Do NOT escape backticks or `$` — write them as-is:
+
+```bash
+gh pr edit 123 --body "$(cat <<'EOF'
+Use `SomeFunc` to call `OtherFunc` with `$variable`.
+EOF
+)"
+```
+
+This applies to commit messages and any other text passed via heredoc.
+
 ## Code Style
 
 Write code that is concise and easy for a reviewer to follow. Code
