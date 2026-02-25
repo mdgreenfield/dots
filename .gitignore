@@ -18,3 +18,8 @@ target/
 ######################
 .DS_Store
 Thumbs.db
+
+# Claude Code - local/machine-specific overrides #
+###################################################
+.claude/settings.local.json
+CLAUDE.local.md
