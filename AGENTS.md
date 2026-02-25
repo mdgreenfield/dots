@@ -14,6 +14,12 @@ looking under `~/dd` first.
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
 
+If `gh` returns a 401 error, authenticate with:
+
+```bash
+export GITHUB_TOKEN=$(ddtool auth github token)
+```
+
 ## Shell Heredocs
 
 In single-quoted heredocs (`<<'EOF'`), the shell treats all content literally.
@@ -28,6 +34,16 @@ EOF
 
 This applies to commit messages and any other text passed via heredoc.
 
+## Go Modules (Datadog Internal)
+
+`go.ddbuild.io` modules are served from Datadog internal infrastructure and
+require VPN to download. If `go get` or `go mod download` times out, check VPN
+connectivity first.
+
+Workaround when offline: add a temporary `replace` directive in `go.mod`
+pointing to a locally-cached version in `~/go/pkg/mod`. **Revert before
+committing.**
+
 ## Testing
 
 Tests are a priority for any fix or new functionality. Write tests
@@ -40,6 +56,11 @@ All applicable tests must be run and pass before committing. Check
 for a Makefile and run all relevant targets (e.g. `make test`). If a
 linter is available, run it too (e.g. `make lint`) and resolve any
 issues before committing. Make targets can be run in parallel.
+
+In Go tests, prefer `t.Context()` over `context.Background()`. Note
+that removing `context.Background()` calls does not necessarily make
+the `context` import unused — method signatures may still reference
+`context.Context`.
 
 ## Code Style
 
