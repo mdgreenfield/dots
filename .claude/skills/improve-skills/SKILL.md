@@ -13,20 +13,32 @@ You just spent time working with skills, CLI tools, and scripts in this repo. No
 
 ## Your Scope
 
-First, identify what to improve. Check if you're in a git repo:
+First, identify what to improve:
 
 ```bash
-git rev-parse --show-toplevel 2>/dev/null || echo "not a git repo"
+# Check for skills/tools in the current repo
+find . -name "SKILL.md" -type f 2>/dev/null
+ls dev/ .claude/skills/*/scripts/ skills/*/scripts/ 2>/dev/null || true
+
+# Always also check personal skills
+ls ~/.claude/skills/
 ```
 
-**If in a git repo**, focus on:
-- Skills in this repo (`.claude/skills/` and `skills/` directories)
-- CLI tools in this repo (`dev/`, `scripts/`, and skill `scripts/` directories)
-- Documentation files like `CLAUDE.md` and `AGENTS.md`
+**Improve everything that's relevant**, in priority order:
 
-**If not in a git repo** (e.g., invoked from `~`), focus on:
-- Skills used in this session — check `~/.claude/skills/` and any symlinked skill repos
-- The skill(s) most recently invoked or discussed in the conversation
+1. **Current repo** (if it has skills or CLI tools):
+   - Skills in `.claude/skills/` and `skills/` directories
+   - CLI tools in `dev/`, `scripts/`, skill `scripts/` directories
+   - `CLAUDE.md` / `AGENTS.md` if agent-workflow patterns emerged
+
+2. **Personal skills** (`~/.claude/skills/`, always check):
+   - `improve-skills`, `personal-config`, and any others
+   - Update if this session revealed gaps in their guidance
+
+3. **Project memory** (if a `memory/MEMORY.md` exists for this project):
+   - Record stable patterns, conventions, and gotchas discovered
+
+If the current repo has **no skills or tools**, skip straight to (2) and (3).
 
 ## Your Full Authority
 
@@ -47,16 +59,6 @@ Think back to the skill or CLI tool you were just working with. You have fresh c
 - What CLI tools or scripts did you run?
 - What commands did you repeat with variations?
 - What workflows felt clunky?
-
-### List Skills and Tools in This Repo
-
-```bash
-# List all skills in this repo
-find . -name "SKILL.md" -type f 2>/dev/null
-
-# List CLI tools in common locations
-ls -la dev/ .claude/skills/*/scripts/ skills/*/scripts/ 2>/dev/null || true
-```
 
 ## Step 2: Reflect on Your Experience
 
