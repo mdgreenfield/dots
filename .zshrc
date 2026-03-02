@@ -8,6 +8,7 @@ source $ZSH/oh-my-zsh.sh
 alias sp='source ~/.zshrc'
 alias vi='vim'
 alias ll='ls -al'
+alias k=kubectl
 
 export EDITOR=vim
 
