@@ -14,10 +14,10 @@ looking under `~/dd` first.
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
 
-If `gh` returns a 401 error, authenticate with:
+If `gh` returns a 401 error, re-authenticate with:
 
 ```bash
-export GITHUB_TOKEN=$(ddtool auth github token)
+gh auth login
 ```
 
 ## Shell Heredocs
@@ -33,6 +33,12 @@ EOF
 ```
 
 This applies to commit messages and any other text passed via heredoc.
+
+## Go Style
+
+Always prefer functions from the Go standard library over implementing
+equivalent functionality ourselves. Before writing custom logic, check
+whether the stdlib already provides it.
 
 ## Go Modules (Datadog Internal)
 
@@ -75,6 +81,19 @@ what the code does. Reserve comments for:
 - Complex logic that isn't immediately obvious
 - Caveats, gotchas, or non-obvious constraints
 - Conditions or side effects that callers need to be aware of
+
+## Splitting a Commit into Two
+
+`git add -p` requires a TTY and does not work with piped input in this
+environment. To produce two commits from a set of mixed changes:
+
+1. `git reset --soft <base>` — collapse commits back to working tree, staged
+2. `git restore --staged <file>` — unstage the file you need to split
+3. Edit the file to contain only the first commit's changes
+4. `git add <file>` + `git commit`
+5. Edit the file again to add the second commit's changes
+6. `git add <file>` + `git commit`
+7. `git push --force-with-lease`
 
 ## Git Branches
 
@@ -131,3 +150,4 @@ Further paragraphs come after blank lines.
 - Use the imperative mood in the subject line
 - Wrap the body at 72 characters
 - Use the body to explain what and why vs. how
+- Never mention test or lint status in PR descriptions — GitHub status checks handle that
