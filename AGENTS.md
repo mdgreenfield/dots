@@ -127,7 +127,11 @@ planning.
 
 The summary should be a `project` memory file named
 `session_YYYY-MM-DD_<slug>.md` where the slug is a 2-4 word description
-of the session's main topic. Cover:
+of the session's main topic. Use the date the session started — if a
+session spans multiple days or is resumed later, keep the original
+filename but add a "Last updated: YYYY-MM-DD" line near the top when
+updating. Always update the existing note rather than creating a new one
+for the same session. Cover:
 
 - What was worked on
 - Decisions made and why
