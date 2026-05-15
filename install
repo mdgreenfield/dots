@@ -27,7 +27,11 @@ mkdir -p ~/.tmux
 git clone --quiet https://github.com/jonmosco/kube-tmux.git ~/.tmux/kube-tmux
 
 echo 'Configuring alacritty'
-cp ~/dots/.alacritty.yml ~/.alacritty.yml
+cp ~/dots/.alacritty.toml ~/.alacritty.toml
+
+echo 'Configuring ghostty'
+mkdir -p ~/.config/ghostty
+cp ~/dots/ghostty-config ~/.config/ghostty/config
 
 echo 'Configuring git'
 cd ~

@@ -1,0 +1,24 @@
+# Ported from Alacritty — commented out to preserve Ghostty defaults
+#
+# background = #000000
+# foreground = #00ff00
+#
+# # Normal colors (0-7)
+# palette = 0=#2e3436
+# palette = 1=#cc0000
+# palette = 2=#73d216
+# palette = 3=#edd400
+# palette = 4=#3465a4
+# palette = 5=#75507b
+# palette = 6=#06989a
+# palette = 7=#d3d7cf
+#
+# # Bright colors (8-15)
+# palette = 8=#2e3436
+# palette = 9=#ef2929
+# palette = 10=#8ae234
+# palette = 11=#fce94f
+# palette = 12=#729fcf
+# palette = 13=#ad7fa8
+# palette = 14=#34e2e2
+# palette = 15=#eeeeec
