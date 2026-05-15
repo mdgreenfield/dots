@@ -112,6 +112,34 @@ what the code does. Reserve comments for:
 - Caveats, gotchas, or non-obvious constraints
 - Conditions or side effects that callers need to be aware of
 
+## Session Summaries
+
+At the end of any substantial session, write a dated session summary to
+the current project's memory directory without being asked. Do this when:
+
+- The user signals they're wrapping up ("thanks", "done", "that's all")
+- Context compaction is triggered (write the summary before compacting)
+
+Skip it for short exchanges that are just answering a quick question or
+looking something up — only summarize sessions involving real work:
+code changes, architectural decisions, research findings, debugging, or
+planning.
+
+The summary should be a `project` memory file named
+`session_YYYY-MM-DD_<slug>.md` where the slug is a 2-4 word description
+of the session's main topic. Cover:
+
+- What was worked on
+- Decisions made and why
+- Key findings or outcomes
+- Open threads or follow-up items
+
+Include enough detail to pick up where the session left off. Concretely:
+preserve any data, tables, analysis results, commands with their output,
+or other artifacts produced during the session — not just a prose summary
+of what happened. The goal is that a future session reading this note
+can continue the work without having to redo the research or analysis.
+
 ## Research and Analysis
 
 When asked to do a deep dive or analysis on a topic:
