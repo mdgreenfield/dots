@@ -1,5 +1,30 @@
 # Agent Instructions
 
+## Safety: No Destructive Actions Without Explicit Approval
+
+**CRITICAL — applies in all modes including `--dangerously-skip-permissions`:**
+
+Never take any write, update, or delete action against any environment,
+dataset, or service without the user's explicit approval first. This is
+a hard stop, not a default that context can override.
+
+Specifically, you must NEVER (without explicit per-action approval):
+
+- Make any mutating request to RMS or any Datadog internal API — via
+  `ddtool`, `curl`, MCP tools, or any other mechanism. Read-only
+  (`GET`/`describe`/`list`) requests are fine.
+- Create, update, patch, delete, or restart any Kubernetes resource
+  (deployments, pods, configmaps, secrets, CRDs, etc.) in any cluster.
+- Trigger, promote, pause, cancel, or roll back any deployment or
+  release pipeline (Conductor, GitLab CI, GitHub Actions, etc.).
+- Drop, truncate, or modify any database, index, or persistent store.
+- Send messages, post comments, or take actions visible to others
+  (Slack, GitHub issues/PRs, Jira, etc.) beyond what the user has
+  already explicitly requested in the current turn.
+
+When in doubt, stop and ask. The cost of one confirmation is always
+lower than the cost of an unintended change to a live system.
+
 ## Repository Locations
 
 Most work repositories live under `~/dd`. Exceptions:
@@ -33,6 +58,11 @@ EOF
 ```
 
 This applies to commit messages and any other text passed via heredoc.
+
+## File Editing
+
+Always use the `Edit` or `Write` tools to modify files. Never use Python
+scripts, sed, or awk for file editing.
 
 ## Go Style
 
@@ -82,20 +112,37 @@ what the code does. Reserve comments for:
 - Caveats, gotchas, or non-obvious constraints
 - Conditions or side effects that callers need to be aware of
 
-## Splitting a Commit into Two
+## Research and Analysis
 
-`git add -p` requires a TTY and does not work with piped input in this
-environment. To produce two commits from a set of mixed changes:
+When asked to do a deep dive or analysis on a topic:
 
-1. `git reset --soft <base>` — collapse commits back to working tree, staged
-2. `git restore --staged <file>` — unstage the file you need to split
-3. Edit the file to contain only the first commit's changes
-4. `git add <file>` + `git commit`
-5. Edit the file again to add the second commit's changes
-6. `git add <file>` + `git commit`
-7. `git push --force-with-lease`
+- Dispatch multiple subagents in parallel to fetch content from external
+  sources rather than querying them sequentially. Use one subagent per
+  source or workstream so fetches overlap.
+- Before drawing conclusions, verify you have a complete picture. Cross-check
+  findings across sources, identify gaps, and follow up on anything ambiguous
+  or contradictory before reporting back.
+- Do not summarize prematurely. Incomplete research that misses key context
+  is worse than taking more time to be thorough.
+- Once research is complete, ask any clarifying questions before forming
+  conclusions. Do not jump to recommendations if there are open questions
+  that would materially affect the answer.
 
-## Git Branches
+## Writing Style
+
+When drafting any content on the user's behalf — Jira tickets, PR
+descriptions, code comments, Slack messages, or any other authored text —
+follow these conventions:
+
+- **Tone:** polite and respectful, concise and direct, written as an
+  engineer would write it (precise and clear, no filler or fluff)
+- **Punctuation:** no dashes, em dashes, or semicolons; avoid colons
+  except when introducing an enumerated list
+- **Spelling:** "datacenter" (one word), not "data center"
+
+## Git Workflow
+
+### Branches
 
 Always name branches using the format `mdgreenfield/<name_of_feature_or_jira_ticket_number>`.
 
@@ -103,51 +150,60 @@ Examples:
 - `mdgreenfield/JIRA-1234`
 - `mdgreenfield/add-rate-limit-metrics`
 
-## Git Commit Messages / GitHub Pull Requests
+### Commit Hygiene
 
-Commit messages and pull request descriptions should be clear and
-concise and not just restate what the code does. The subject line
-should summarize the change in plain language so a reviewer can
-understand it at a glance without reading the diff.
+Before pushing or opening a PR, review the commit history and tidy it up:
 
-When creating or editing a pull request description, always follow this template:
+- **Squash iterative commits** — fix-ups, typo corrections, "address
+  review feedback", and other small iterations on the same logical change
+  should be squashed into the commit they belong to. The goal is a history
+  that reads as if the work was done right the first time.
+- **Keep logical units separate** — distinct concerns (e.g. a refactor
+  and a bug fix, or two independent features) should remain as separate
+  commits. Don't over-squash.
+- **Reorder when it improves readability** — if commits are out of logical
+  order, reorder them so the history tells a coherent story.
 
-**Title**
-- Format: `<Jira project key>: <short summary>` (less than 50 characters)
-- Example: `JIRA-1234: add rate limit metrics to ingestion path`
+Always `push --force-with-lease` after rewriting history.
 
-**Body:**
+**Splitting a commit:** `git add -p` requires a TTY and does not work in
+this environment. To split a commit:
 
-More detailed explanatory text, *if necessary*. Wrap it to about 72
-characters or so. In some contexts, the first line is treated as the
-subject of the commit and the rest of the text as the body. The
-blank line separating the summary from the body is critical (unless
-you omit the body entirely); various tools like `log`, `shortlog`
-and `rebase` can get confused if you run the two together.
+1. `git reset --soft <base>` — collapse commits back to working tree, staged
+2. `git restore --staged <file>` — unstage the file to split
+3. Edit the file to contain only the first commit's changes
+4. `git add <file>` + `git commit`
+5. Edit the file to add the second commit's changes
+6. `git add <file>` + `git commit`
+7. `git push --force-with-lease`
 
-Explain the problem that this commit is solving. Focus on why you
-are making this change as opposed to how (the code explains that).
-Are there side effects or other unintuitive consequences of this
-change? Here's the place to explain them.
+### Commit Messages
 
-Further paragraphs come after blank lines.
-
- - Bullet points are okay, too
-
- - Typically a hyphen or asterisk is used for the bullet, preceded
-   by a single space, with blank lines in between, but conventions
-   vary here
-
-- Keep tone concise and professional, no emojis.
-- The JIRA ticket number can usually be found in the git branch `mdgreenfield/JIRA-1234`.
-- If no JIRA ticket number can be determined, default to `PPLAT-NR`.
-- Prefer American English.
-- If I say "write a PR message" or "open a PR for this branch", use this format.
 - Separate subject from body with a blank line
-- Limit the subject line to 50 characters
-- Capitalize the subject line
-- Do not end the subject line with a period
+- Limit the subject line to 50 characters; capitalize it; no trailing period
 - Use the imperative mood in the subject line
 - Wrap the body at 72 characters
-- Use the body to explain what and why vs. how
-- Never mention test or lint status in PR descriptions — GitHub status checks handle that
+- Explain what and why, not how
+- Keep tone concise and professional, no emojis; prefer American English
+- Never attribute a change to a reviewer (e.g. "address X's feedback",
+  "per code review"). Write as if the improvement was independently
+  discovered — describe what changed and why it's better.
+
+### Pull Requests
+
+When creating or editing a PR, use this format:
+
+**Title:** `<Jira project key>: <short summary>` (50 characters or less)
+- Example: `JIRA-1234: add rate limit metrics to ingestion path`
+- The Jira ticket number is usually in the branch name. If none, use `PPLAT-NR`.
+
+**Body:** Explain the problem being solved and why this approach was
+taken. Cover side effects and non-obvious consequences. Bullet points
+are fine. Wrap at 72 characters.
+
+- Never mention test or lint status — GitHub status checks handle that.
+- Never attribute changes to a reviewer.
+- After any substantive change to the branch (new commits, squashes,
+  rebases), verify the PR description is still accurate and update it
+  with `gh pr edit` if needed. Never leave a description that
+  contradicts or omits what the branch actually does.
