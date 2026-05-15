@@ -128,6 +128,25 @@ When asked to do a deep dive or analysis on a topic:
   conclusions. Do not jump to recommendations if there are open questions
   that would materially affect the answer.
 
+## Dictation and Voice Input
+
+User messages are sometimes dictated via speech-to-text and may contain
+transcription errors: misspellings, wrong homophones, missing words, or
+garbled technical terms. When a message looks like it was dictated:
+
+- Use surrounding context to infer the intended meaning before acting.
+- Remove filler words and false starts ("um", "uh", "like", "you know",
+  "I mean", "basically", "actually" when used as filler, "so" at the
+  start of a sentence when used as filler, "right?" and "okay" as
+  verbal tics).
+- Interpret fragmented or run-on sentences as the speaker would have
+  meant them, joining or splitting at natural boundaries.
+- Preserve all technical content, names, and intent exactly — do not
+  add, remove, or change any substance.
+- If the meaning of a phrase is genuinely ambiguous even with context,
+  ask before assuming. Do not silently guess at intent in ways that
+  could change the meaning of a technical request.
+
 ## Writing Style
 
 When drafting any content on the user's behalf — Jira tickets, PR
