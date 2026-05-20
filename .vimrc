@@ -1,51 +1,41 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Managed by vim-plug. Install: curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+call plug#begin('~/.vim/plugged')
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+Plug 'bling/vim-airline'
+Plug 'mkitt/tabline.vim'
+Plug 'lifepillar/vim-mucomplete'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-vividchalk'
+Plug 'majutsushi/tagbar'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'vim-ruby/vim-ruby'
+Plug 'depuracao/vim-rdoc'
+Plug 'vim-scripts/Gist.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'flazz/vim-colorschemes'
+Plug 'bkad/CamelCaseMotion'
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'dense-analysis/ale'
+Plug 'vim-scripts/IndexedSearch'
 
-Plugin 'bling/vim-airline'
-Plugin 'mkitt/tabline.vim'
-Plugin 'lifepillar/vim-mucomplete'
-Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-vividchalk'
-Plugin 'majutsushi/tagbar'
-Plugin 'fatih/vim-go' " need to run :GoInstallBinaries
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'depuracao/vim-rdoc'
-Plugin 'vim-scripts/Gist.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'bkad/CamelCaseMotion'
-Plugin 'vim-scripts/argtextobj.vim'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'dense-analysis/ale'
-Plugin 'IndexedSearch'
+call plug#end()
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
 " Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+" :PlugInstall      - install plugins
+" :PlugUpdate       - update plugins
+" :PlugClean        - remove unused plugins
+" :PlugStatus       - status of plugins
+" see :h plug for details
 
 syntax on
 
