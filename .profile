@@ -16,7 +16,6 @@ export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d"
 [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 
 # Autocomplete for 'g' as well
-alias git=hub
 alias g='git'
 complete -o default -o nospace -F _git g
 
