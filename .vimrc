@@ -39,8 +39,25 @@ call plug#end()
 
 syntax on
 
-" Remove all trailing whitespace
-autocmd BufWritePre * :%s/\s\+$//e
+" Remove trailing whitespace without disturbing cursor or jumplist
+function! s:StripTrailingWhitespace()
+  let l:view = winsaveview()
+  silent! keeppatterns %s/\s\+$//e
+  call winrestview(l:view)
+endfunction
+autocmd BufWritePre * call s:StripTrailingWhitespace()
+
+" Persistent undo across sessions
+if has('persistent_undo')
+  if !isdirectory(expand('~/.vim/undo'))
+    call mkdir(expand('~/.vim/undo'), 'p', 0700)
+  endif
+  set undodir=~/.vim/undo
+  set undofile
+endif
+
+" Restore cursor position when reopening a file
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 set nowrap
 
@@ -89,6 +106,9 @@ set splitright
 "set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
 
 set t_Co=256
+if has('termguicolors')
+  set termguicolors
+endif
 
 "Set color scheme
 silent! colorscheme desert256v2
@@ -120,8 +140,11 @@ set wildignore+=*.class "java/scala class files"
 set wildignore+=*/target/* "java/scala target directory"
 set wildignore+=*/.idea,*.iml "intellij droppings"
 
-" The Silver Searcher
-if executable('ag')
+" Prefer ripgrep, fall back to ag
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+  set grepformat=%f:%l:%c:%m
+elseif executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 endif
 
