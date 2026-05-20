@@ -1,5 +1,5 @@
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
+ZSH_THEME=""
 HIST_STAMPS="%m-%d-%Y %T"
 plugins=(fzf git zsh-autosuggestions zsh-syntax-highlighting)
 
@@ -19,3 +19,5 @@ fi
 function jwt-dump() {
   jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< $(echo "$1")
 }
+
+eval "$(starship init zsh)"

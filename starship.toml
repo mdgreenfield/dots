@@ -1,0 +1,17 @@
+# Render the prompt on a single line
+add_newline = false
+
+[line_break]
+disabled = true
+
+# Kube context shown via kube-tmux in the tmux status bar instead.
+
+# Surface slow commands (anything over 2s)
+[cmd_duration]
+min_time = 2_000
+
+[gcloud]
+disabled = true
+
+[golang]
+disabled = true
