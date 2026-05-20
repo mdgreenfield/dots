@@ -9,3 +9,33 @@ NOTE: on OS X you may need to do the following (hope to automate this later):
 If you want faster searching install the_silver_searcher. Vim should still successfully
 load without this installed.
 - `brew install the_silver_searcher`
+
+## Git identity
+
+`.gitconfig` only sets `[user] name`. The email lives in two machine-local
+files that are NOT committed to this repo:
+
+- `~/.gitconfig.personal` — default email for non-Datadog repos
+- `~/.gitconfig.work` — Datadog email, applied via `includeIf` for repos
+  under `~/dd/` or `~/go/src/github.com/DataDog/`
+
+Both files are silently skipped if missing, so create only what each machine
+needs.
+
+```sh
+# Personal email default (every machine)
+cat > ~/.gitconfig.personal <<'EOF'
+[user]
+    email = <personal email>
+EOF
+
+# Work email override (work machines only)
+cat > ~/.gitconfig.work <<'EOF'
+[user]
+    email = <work email>
+EOF
+```
+
+Verify with `git config --show-origin --get user.email` from inside a Datadog
+repo (expect `.gitconfig.work`) and from anywhere else (expect
+`.gitconfig.personal`).

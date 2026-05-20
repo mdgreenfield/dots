@@ -1,3 +1,16 @@
+# Identity is split across this file and two machine-local files (not in dots):
+#   ~/.gitconfig.personal   supplies the personal email (default everywhere)
+#   ~/.gitconfig.work       supplies the work email, applied only inside the
+#                           gitdir prefixes listed below
+# Either file is silently ignored if missing. See the README for setup steps.
+[user]
+    name = Matt Greenfield
+[include]
+    path = ~/.gitconfig.personal
+[includeIf "gitdir:~/dd/"]
+    path = ~/.gitconfig.work
+[includeIf "gitdir:~/go/src/github.com/DataDog/"]
+    path = ~/.gitconfig.work
 # Color highlighting of output makes stuff easier to read
 [color]
     branch = auto
