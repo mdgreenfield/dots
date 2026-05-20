@@ -30,3 +30,11 @@ function compare() {
 }
 
 eval "$(starship init zsh)"
+
+# Stamp the right edge of the executed prompt line with the current time
+autoload -Uz add-zsh-hook
+__timestamp_preexec() {
+  local ts="[$(date '+%H:%M:%S')]"
+  printf '\e7\e[1A\e[%dG\e[2m%s\e[0m\e8' $((COLUMNS - ${#ts} + 1)) "$ts"
+}
+add-zsh-hook preexec __timestamp_preexec
