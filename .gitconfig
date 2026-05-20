@@ -53,10 +53,33 @@
 [core]
     excludesfile = ~/.gitignore
     autocrlf = false
-    ignorecase = true
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    light = false
 [diff]
     # For Github-style word diffs
     wordRegex = [^[:space:]]
+    algorithm = histogram
+[pull]
+    rebase = true
+[push]
+    autoSetupRemote = true
+[fetch]
+    prune = true
+[merge]
+    conflictstyle = zdiff3
+[rebase]
+    autoStash = true
+    autoSquash = true
+[commit]
+    verbose = true
+[column]
+    ui = auto
+[branch]
+    sort = -committerdate
 [init]
     # Set a template directory for all git repos
     templateDir = ~/.git_template
