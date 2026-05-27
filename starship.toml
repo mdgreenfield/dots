@@ -10,6 +10,9 @@ disabled = true
 [cmd_duration]
 min_time = 2_000
 
+[aws]
+disabled = true
+
 [gcloud]
 disabled = true
 
