@@ -64,9 +64,9 @@
 [core]
     excludesfile = ~/.gitignore
     autocrlf = false
-    pager = delta
+    pager = sh -c 'command -v delta >/dev/null 2>&1 && exec delta || exec less -FRX' --
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = sh -c 'command -v delta >/dev/null 2>&1 && exec delta --color-only || cat' --
 [delta]
     navigate = true
     light = false

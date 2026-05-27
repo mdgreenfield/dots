@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
 set -e
-#set -u
 set -o pipefail
+
+# Install Homebrew packages first — everything else (delta, starship, ripgrep,
+# bat) must be present before configs that reference them are put in place.
+echo 'Installing Homebrew packages'
+brew bundle --file=~/dots/brew/Brewfile
 
 if [ ! -d "$ZSH" ]; then
   echo 'Installing oh-my-zsh'
@@ -16,34 +20,41 @@ echo 'Configuring oh-my-zsh'
 rm ~/.zshrc || true
 cp ~/dots/.zshrc ~/.zshrc
 
-rm -rf ${ZSH_CUSTOM:-~/.oh-my-zsh/custom/}
-mkdir -p ${ZSH_CUSTOM:-~/.oh-my-zsh/custom/plugins}
-git clone --quiet https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+mkdir -p "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins"
+if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+  git clone --quiet https://github.com/zsh-users/zsh-autosuggestions \
+    "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+fi
+if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+  git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting.git \
+    "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+fi
+
+echo 'Configuring starship'
+mkdir -p ~/.config
+cp ~/dots/starship.toml ~/.config/starship.toml
 
 echo 'Configuring tmux'
 cp ~/dots/.tmux.conf ~/.tmux.conf
 mkdir -p ~/.tmux
-git clone --quiet https://github.com/jonmosco/kube-tmux.git ~/.tmux/kube-tmux
-
-echo 'Configuring alacritty'
-cp ~/dots/.alacritty.toml ~/.alacritty.toml
+if [ ! -d ~/.tmux/kube-tmux ]; then
+  git clone --quiet https://github.com/jonmosco/kube-tmux.git ~/.tmux/kube-tmux
+fi
 
 echo 'Configuring ghostty'
 mkdir -p ~/.config/ghostty
 cp ~/dots/ghostty-config ~/.config/ghostty/config
 
 echo 'Configuring git'
-cd ~
 rm ~/.gitignore || true
 cp ~/dots/.gitignore ~/.gitignore
 
 echo 'Configuring vim'
 rm -rf ~/.vim/
 cp ~/dots/.vimrc ~/.vimrc
-git clone --quiet https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-vim +PluginInstall +qall
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+vim +PlugInstall +qall
 
 echo 'Configuring MySQL'
 cp ~/dots/.my.cnf ~/.my.cnf
-

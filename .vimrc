@@ -1,8 +1,13 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible
+filetype off
 
-" Managed by vim-plug. Install: curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" Auto-install vim-plug if missing
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 
 Plug 'bling/vim-airline'
