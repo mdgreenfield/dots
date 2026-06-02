@@ -65,6 +65,8 @@
     excludesfile = ~/.gitignore
     autocrlf = false
     pager = delta
+[url "git@github.com:"]
+    insteadOf = https://github.com/
 [interactive]
     diffFilter = delta --color-only
 [delta]
