@@ -32,7 +32,7 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:wrap --bind 
 # Ctrl-T file list: prefer fd (respects .gitignore + ~/.config/fd/ignore),
 # fall back to a pruned find when fd isn't installed.
 if command -v fd >/dev/null 2>&1; then
-  export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow'
+  export FZF_CTRL_T_COMMAND='fd --type f --hidden'
 else
   export FZF_CTRL_T_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type f -print 2>/dev/null'
 fi

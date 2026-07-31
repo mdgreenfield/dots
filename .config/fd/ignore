@@ -6,3 +6,19 @@ node_modules/
 .venv/
 Library/
 go/pkg/
+
+# Language toolchains / package caches
+.pyenv/
+.rbenv/
+.cargo/
+.rustup/
+.npm/
+
+# Cloud sync, backups, and media (slow to stat or irrelevant to code search)
+Google Drive/
+.Datadog-Configuration-Backups/
+.local/
+Pictures/
+Movies/
+Music/
+.Trash/
