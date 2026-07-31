@@ -18,6 +18,11 @@ alias g=git
 export EDITOR=vim
 export PATH="$HOME/go/bin:$PATH"
 
+# --- fzf options -------------------------------------------------------------
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border --bind ctrl-j:down,ctrl-k:up'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:wrap --bind ctrl-y:accept"
+
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   tmux attach -t default || tmux new -s default
 fi
