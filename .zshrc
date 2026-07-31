@@ -66,3 +66,6 @@ __timestamp_preexec() {
   printf '\e7\e[1A\e[%dG\e[2m%s\e[0m\e8' $((COLUMNS - ${#ts} + 1)) "$ts"
 }
 add-zsh-hook preexec __timestamp_preexec
+
+# Machine-local / work-specific config, not tracked in dots
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
