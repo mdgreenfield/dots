@@ -29,6 +29,14 @@ export FZF_DEFAULT_OPTS='--height 40% --reverse --border --bind ctrl-j:down,ctrl
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:wrap --bind ctrl-y:accept"
 
+# Ctrl-T file list: prefer fd (respects .gitignore + ~/.config/fd/ignore),
+# fall back to a pruned find when fd isn't installed.
+if command -v fd >/dev/null 2>&1; then
+  export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow'
+else
+  export FZF_CTRL_T_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type f -print 2>/dev/null'
+fi
+
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   tmux attach -t default || tmux new -s default
 fi

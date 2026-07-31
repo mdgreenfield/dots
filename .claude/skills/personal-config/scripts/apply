@@ -9,6 +9,7 @@ apply() {
   local src="$DOTS/$1" dst="$HOME/$2" mode="${3:-}"
   if [ ! -f "$src" ]; then return; fi
   if ! diff -q "$src" "$dst" &>/dev/null 2>&1; then
+    mkdir -p "$(dirname "$dst")"
     cp "$src" "$dst"
     [ -n "$mode" ] && chmod "$mode" "$dst"
     echo "applied: $2"
@@ -25,6 +26,7 @@ apply .gitignore    .gitignore
 apply .alacritty.toml .alacritty.toml
 apply .my.cnf       .my.cnf
 apply .ssh/config   .ssh/config 600
+apply .config/fd/ignore .config/fd/ignore
 
 if [ $CHANGED -eq 0 ]; then
   echo "all configs up to date"

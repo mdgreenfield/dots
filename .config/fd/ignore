@@ -1,0 +1,8 @@
+# Global fd ignore (gitignore syntax). Applies everywhere, including $HOME.
+.git/
+node_modules/
+.cache/
+.terraform/
+.venv/
+Library/
+go/pkg/
