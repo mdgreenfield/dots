@@ -32,16 +32,16 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:wrap --bind 
 # Ctrl-T file list: prefer fd (respects .gitignore + ~/.config/fd/ignore),
 # fall back to a pruned find when fd isn't installed.
 if command -v fd >/dev/null 2>&1; then
-  export FZF_CTRL_T_COMMAND='fd --type f --hidden'
+  export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow'
 else
-  export FZF_CTRL_T_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type f -print 2>/dev/null'
+  export FZF_CTRL_T_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" -o -path "*/go/src" \) -prune -o -type f -print 2>/dev/null'
 fi
 
 # Alt-C directory jump: same fd/find treatment as Ctrl-T, with a listing preview.
 if command -v fd >/dev/null 2>&1; then
-  export FZF_ALT_C_COMMAND='fd --type d --hidden'
+  export FZF_ALT_C_COMMAND='fd --type d --hidden --follow'
 else
-  export FZF_ALT_C_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type d -print 2>/dev/null'
+  export FZF_ALT_C_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" -o -path "*/go/src" \) -prune -o -type d -print 2>/dev/null'
 fi
 export FZF_ALT_C_OPTS="--preview 'CLICOLOR_FORCE=1 ls -la {} | head -200'"
 

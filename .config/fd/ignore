@@ -6,6 +6,9 @@ node_modules/
 .venv/
 Library/
 go/pkg/
+# ~/dd symlinks to go/src/github.com/DataDog; hide the canonical copy so
+# --follow surfaces the tree once (via ~/dd) instead of twice.
+go/src/
 
 # Language toolchains / package caches
 .pyenv/
