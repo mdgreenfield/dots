@@ -1,9 +1,15 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 HIST_STAMPS="%m-%d-%Y %T"
-plugins=(fzf git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(fzf git zsh-autosuggestions zsh-syntax-highlighting history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
+
+# history-substring-search: type a prefix, then Up/Down cycles only matching history
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 
 HISTSIZE=100000
 SAVEHIST=100000
