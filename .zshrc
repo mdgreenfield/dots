@@ -37,6 +37,14 @@ else
   export FZF_CTRL_T_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type f -print 2>/dev/null'
 fi
 
+# Alt-C directory jump: same fd/find treatment as Ctrl-T, with a listing preview.
+if command -v fd >/dev/null 2>&1; then
+  export FZF_ALT_C_COMMAND='fd --type d --hidden'
+else
+  export FZF_ALT_C_COMMAND='find -L . -type d \( -name .git -o -name node_modules -o -name .cache -o -name .terraform -o -name .venv -o -name Library -o -path "*/go/pkg" \) -prune -o -type d -print 2>/dev/null'
+fi
+export FZF_ALT_C_OPTS="--preview 'CLICOLOR_FORCE=1 ls -la {} | head -200'"
+
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   tmux attach -t default || tmux new -s default
 fi
