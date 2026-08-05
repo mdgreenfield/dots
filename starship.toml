@@ -1,5 +1,6 @@
 # Render the prompt on a single line
 add_newline = false
+scan_timeout = 100
 
 [line_break]
 disabled = true
