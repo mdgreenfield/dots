@@ -45,9 +45,12 @@ else
 fi
 export FZF_ALT_C_OPTS="--preview 'CLICOLOR_FORCE=1 ls -la {} | head -200'"
 
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [[ -z "$NOTMUX" ]]; then
   tmux attach -t default || tmux new -s default
 fi
+
+# Ghostty window without the tmux auto-attach (e.g. for running herdr)
+alias gplain='open -na Ghostty --env NOTMUX=1'
 
 function jwt-dump() {
   jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< "$1"
@@ -69,3 +72,5 @@ add-zsh-hook preexec __timestamp_preexec
 
 # Machine-local / work-specific config, not tracked in dots
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+eval "$(/opt/dogbrew/bin/dogbrew init zsh)"
