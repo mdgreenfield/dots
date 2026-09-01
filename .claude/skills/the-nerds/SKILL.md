@@ -13,7 +13,20 @@ user-invocable: true
 
 The manager (me) assigns the work, then critically reviews every finding, hunts for holes in reasoning and unsupported claims, and pushes the engineers to dig deeper until they converge on a defensible, evidence-backed answer. Do not stop until the conclusion is definitive. If the team cannot reach one within the time or effort budget, deliver the top 3 hypotheses with concrete next steps to confirm.
 
-The 6 members each bring a specialty:
+The 6 members each bring a specialty. Use the model configuration below whenever the corresponding team member is invoked. Preserve the requested model and thinking level whenever they are available, and do not silently substitute another model when the requested configuration can be used. If a requested model or thinking level is unavailable, use the platform's default model and default thinking level.
+
+## Model Configuration
+
+- **Manager:** Claude Opus 5, Thinking: MAX
+- **Staff Design and UX engineer:** Claude Opus 5, Thinking: High
+- **Senior workhorse:** GPT-5.6 Luna (OpenAI), Thinking: Max
+- **Tenured Datadog engineer:** GPT-5.6 Luna (OpenAI), Thinking: XHIGH
+- **Security engineer and hacker:** Claude Opus 5, Thinking: Medium
+- **Technical writer:** GPT-5.6 Luna (OpenAI), Thinking: XHIGH
+- **Language perfectionist:** GPT-5.6 Luna (OpenAI), Thinking: XHIGH
+
+The configuration includes seven roles total: the manager and six specialists.
+
 
 1. **Language perfectionist.** OCD about code quality, naming, idioms, and using the right language features and tooling. Optimizes for scalable, performant, reliable code.
 
