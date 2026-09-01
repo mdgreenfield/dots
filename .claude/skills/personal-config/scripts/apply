@@ -21,15 +21,17 @@ apply() {
 }
 
 apply .zshrc        .zshrc
+apply .zprofile     .zprofile
 apply .vimrc        .vimrc
 apply .tmux.conf    .tmux.conf
 apply .gitignore    .gitignore
 # .gitconfig intentionally excluded: it has no [user] block.
 # Manage git identity separately: git config --global user.name/user.email
-apply .alacritty.toml .alacritty.toml
 apply .my.cnf       .my.cnf
 apply .ssh/config   .ssh/config 600
 apply .config/fd/ignore .config/fd/ignore
+apply starship.toml .config/starship.toml
+apply ghostty-config .config/ghostty/config
 
 if [ $CHANGED -eq 0 ]; then
   echo "all configs up to date"
