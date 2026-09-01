@@ -1,3 +1,14 @@
+# Attach to the default tmux session before the heavy init below so a new
+# terminal tab becomes usable as fast as possible. Panes and NOTMUX shells
+# (gplain/herdr) skip this and run the rest of the config.
+if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [[ -z "$NOTMUX" ]]; then
+  tmux attach -t default || tmux new -s default
+fi
+
+# Keep fpath deduplicated: inherited duplicates (FPATH still exported in old
+# pane environments) would otherwise invalidate compinit's zcompdump cache.
+typeset -U fpath
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 HIST_STAMPS="%m-%d-%Y %T"
@@ -45,10 +56,6 @@ else
 fi
 export FZF_ALT_C_OPTS="--preview 'CLICOLOR_FORCE=1 ls -la {} | head -200'"
 
-if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [[ -z "$NOTMUX" ]]; then
-  tmux attach -t default || tmux new -s default
-fi
-
 # Ghostty window without the tmux auto-attach (e.g. for running herdr)
 alias gplain='open -na Ghostty --env NOTMUX=1'
 
@@ -72,5 +79,3 @@ add-zsh-hook preexec __timestamp_preexec
 
 # Machine-local / work-specific config, not tracked in dots
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-
-eval "$(/opt/dogbrew/bin/dogbrew init zsh)"
