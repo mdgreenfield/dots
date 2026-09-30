@@ -1,8 +1,14 @@
-# Attach to the default tmux session before the heavy init below so a new
-# terminal tab becomes usable as fast as possible. Panes and NOTMUX shells
-# (gplain/herdr) skip this and run the rest of the config.
-if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [[ -z "$NOTMUX" ]]; then
-  tmux attach -t default || tmux new -s default
+# Auto-attach the multiplexer before the heavy init below so a new terminal
+# becomes usable as fast as possible: Ghostty starts herdr, every other
+# terminal attaches tmux. Shells already inside a multiplexer ($TMUX, or
+# $HERDR_ENV which herdr sets in its panes) and NOTMUX shells (gplain) skip
+# this and run the rest of the config.
+if [[ -z "$TMUX" && -z "$HERDR_ENV" && -z "$NOTMUX" ]]; then
+  if [[ "$TERM_PROGRAM" == ghostty ]] && command -v herdr &> /dev/null; then
+    herdr
+  elif command -v tmux &> /dev/null; then
+    tmux attach -t default || tmux new -s default
+  fi
 fi
 
 # Keep fpath deduplicated: inherited duplicates (FPATH still exported in old
@@ -56,7 +62,7 @@ else
 fi
 export FZF_ALT_C_OPTS="--preview 'CLICOLOR_FORCE=1 ls -la {} | head -200'"
 
-# Ghostty window without the tmux auto-attach (e.g. for running herdr)
+# Ghostty window with no auto-attached multiplexer (plain shell)
 alias gplain='open -na Ghostty --env NOTMUX=1'
 
 function jwt-dump() {
