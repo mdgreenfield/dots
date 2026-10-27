@@ -1,6 +1,6 @@
 ---
 name: daily-prep
-description: Morning/evening readiness brief — calendar (flagging non-recurring meetings), Jira (new comments from others on my issues), Slack (identity-core team/incidents), and Gmail triage (surface important, archive the routine). Safe to re-run; archives only once per message.
+description: Readiness brief for today or tomorrow (`daily-prep [today|tomorrow]`) — calendar (flagging non-recurring meetings), Jira (new comments from others on my issues), Slack (identity-core team/incidents), and Gmail triage (surface important, archive the routine). No argument: frame guessed from time of day. Safe to re-run; archives only once per message.
 allowed-tools: All tools
 user-invocable: true
 ---
@@ -13,17 +13,35 @@ End-to-end readiness brief. You are the orchestrator: gather raw data with cheap
 
 - `daily prep` / `daily-prep` — brief only, no email mutation.
 - `daily-prep --archive` — also archive triaged noise. Archive runs AFTER the collector (a GMail label update can't race a channel read; Jira/Slack can't see mail labels — ordering is purely about presenting a final, settled inbox state in the brief).
-- Morning run (before ~noon local): brief covers today + tomorrow. Evening run: today + tomorrow + this week's horizon.
+- Frame (first positional argument, case-insensitive): `today` or `tomorrow` — what the brief focuses on.
+  - `today`: the rest of today. The calendar window opens at local midnight so early-morning runs still see the whole day.
+  - `tomorrow`: tomorrow's full day; the remainder of today appears as context only.
+  - No argument: guess from the clock — before 15:00 local ⇒ `today`; 15:00 or later ⇒ `tomorrow`. Always state the chosen frame (and that it was guessed) at the top of the brief.
 - Re-running is safe. Only the `--archive` step mutates anything, and its dedupe marker makes archiving idempotent per message.
 
 ## Phase 1 — Gather (subagent, read-only)
 
-Spawn `daily-prep-gatherer` (cheap GLM 5.3 — see Model note). **Sanity-check your own epoch anchor** — verify `date +%s` locally via bash if possible; if the epoch you pass disagrees with live Slack timestamps, the gatherer will self-correct from live data (and note it):
+Spawn `daily-prep-gatherer` (cheap GLM 5.3 — see Model note). **Sanity-check your own epoch anchor** — verify `date +%s` locally via bash if possible; if the epoch you pass disagrees with live Slack timestamps, the gatherer will self-correct from live data (and note it).
+
+**Resolve the frame first**, before dispatching the collector:
+- If the user passed `today`/`tomorrow` (case-insensitive), that is the frame. Otherwise decide from local time: before 15:00 ⇒ `today`, from 15:00 ⇒ `tomorrow`; note in the brief that it was a guess.
+- From the frame compute the time anchors below (now = real current local time):
+
+| Anchor | Frame `today` | Frame `tomorrow` |
+|---|---|---|
+| `time_min` | local midnight today | local midnight tomorrow |
+| `time_max` | +36h (covers today + tomorrow morning) | +36h (covers tomorrow + next-morning context) |
+| `now_epoch` | real now | real now |
+| Jira comment cutoff | now − 36h | now − 24h |
+| Slack `oldest` | local midnight today | now − 18h |
+| `frame_label` for the brief | `today` | `tomorrow` |
+
+Pass to the gatherer: resolved frame, all five anchors, and the date/epoch sanity pair (`date +%F`, `date +%s`). Anchor dates must match the frame's target day, not just the clock.
 
 ```
 task(context: <skill-file://daily-prep context block below>, tasks: [{
   name: "DailyPrepGather", agent: "daily-prep-gatherer",
-  task: "Collect today's raw daily-prep data. Local date: <YYYY-MM-DD>. Local time: <HH:MM> (<TZ>, UTC offset <+/-HH:MM>). Now epoch seconds: <N>. Return: gather.md (markdown with sections Calendar / Jira / Slack), plus JSON code block on the LAST line: {\"calendar\": [...], \"jira_updated_issues\": [...], \"jira_other_comments\": [...], \"slack\": [...]}.",
+  task: "Collect raw daily-prep data. FRAME: <today|tomorrow>. Local date: <YYYY-MM-DD>. Local time: <HH:MM> (<TZ>, UTC offset <+/-HH:MM>). Now epoch seconds: <N>. Anchors per frame table: time_min <RFC3339>, time_max <RFC3339>, jira_cutoff_epoch <N>, slack_oldest_epoch <N>. Return: gather.md (markdown with sections Calendar / Jira / Slack), plus JSON code block on the LAST line: {\"calendar\": [...], \"jira_updated_issues\": [...], \"jira_other_comments\": [...], \"slack\": [...]}.",
   solutionSpace: "data collection, all queries and sources specified; no design choices"
 }])
 ```
@@ -32,7 +50,7 @@ The collector instructions are in its agent file; you only pass the date/time an
 
 ### Collector spec (for your reference; normative text lives in the agent file)
 
-**Calendar** (`google_calendar_list_events`, `time_min` = local midnight, `time_max` = +36h) — auto-filter (do NOT list, do NOT archive/skip these, they are not meetings):
+**Calendar** (`google_calendar_list_events`, `time_min`/`time_max` from the frame table: `today` = local midnight today +36h, `tomorrow` = local midnight tomorrow +36h) — auto-filter (do NOT list, do NOT archive/skip these, they are not meetings):
 - `responseStatus: "declined"` on the user's own attendance.
 - Personal placeholder blocks: `Home`, `Lunch`, `Bus`, `Commute`, `Focus`, `Gym`, `Family`, `Personal`, `BUSY - Daycare*`.
 - If an event's `recurringEventId` ends in `_R<digits>...`, it's a recurrence instance; if not (e.g. Nook, Philip/Matt, Paul/Matt), it's a standalone occurrence — **flag these as non-recurring (NEW to your radar)**. Recurring 1:1s ("X / Matt") do not get flagged as new.
@@ -40,20 +58,20 @@ The collector instructions are in its agent file; you only pass the date/time an
 **Jira** (`searchJiraIssuesUsingJql`, cloudId `datadoghq.atlassian.net`, fields `["summary","status","updated","comment"]`, `maxResults: 25`):
 1. `assignee = currentUser() AND updated >= -2d ORDER BY updated DESC` — issues I own.
 2. `reporter = currentUser() AND resolution = Unresolved ORDER BY updated DESC` — my open reports.
-3. Fetch comments on all result issues. **NEVER use JQL `commented()` or `comment.created` — they silently return empty/wrong on this instance.** Filter client-side: comments newer than the cutoff whose `author` is not `matt.greenfield` and whose accountId is not `5c1811b070df011836b05698`. Fall back to `updated` if a comment has no timestamp.
+3. Fetch comments on all result issues. **NEVER use JQL `commented()` or `comment.created` — they silently return empty/wrong on this instance.** Filter client-side: comments newer than the frame's Jira cutoff (now − 36h for `today`, now − 24h for `tomorrow`) whose `author` is not `matt.greenfield` and whose accountId is not `5c1811b070df011836b05698`. Fall back to `updated` if a comment has no timestamp.
 
 **Slack** (`slack_read_channel`, pages of 100 with `oldest` bound; use `slack_search_public` for incident search):
 | Channel | ID |
 |---|---|
 | #identity-core-team | `C0BB2NJNM6U` |
 | #identity-core | `C0BA23JDJBD` |
-- Page from `oldest` (local midnight) to now. Dedupe threads by `ts`. Open threads with >3 messages via `slack_read_thread` — thread replies are NOT in the channel page.
+- Page from `oldest` (local midnight for `today`, now − 18h for `tomorrow`) to now. Dedupe threads by `ts`. Open threads with >3 messages via `slack_read_thread` — thread replies are NOT in the channel page.
 
 **Output** — `gather.md` sections `## Calendar`, `## Jira`, `## Slack`, each with a trailing JSON block. For calendar include `id|summary|start|attendees|recurring?|declined?` per event; for Jira include `key|summary|updated` plus any non-me comments; for Slack include `channel|ts|user|text[:120]` plus thread-notice lines.
 
 ## Phase 2 — Email triage (subagent, mutates mail only with `--archive`)
 
-Spawn `daily-prep-triage` (cheap GLM 5.3 — see Model note) **only if `--archive`**; otherwise read-only pass yourself, or skip if the user only wants the brief. Pass cutoff epoch = local midnight (morning) or now minus 18h (evening).
+Spawn `daily-prep-triage` (cheap GLM 5.3 — see Model note) **only if `--archive`**; otherwise read-only pass yourself, or skip if the user only wants the brief. Pass cutoff epoch per frame: `today` ⇒ now − 18h; `tomorrow` ⇒ now − 12h (tomorrow-focused runs still want fresh mail, not a full day of it).
 
 **Classifier in `scripts/triage` is deterministic and fast** — always run it FIRST, then apply subagent judgment on top (adds anything it missed; removes nothing without its own reason). The classifier never mutates mail; the subagent does (and only when `--archive`).
 
@@ -95,7 +113,8 @@ Before archiving, the subagent checks the marker file `~/.local/share/daily-prep
 You (the orchestrator) write the final brief directly in chat. Structure:
 
 ```markdown
-# Daily Prep — <Day>, <Mon DD> <HH:MM>
+# Daily Prep — <Day>, <Mon DD> <HH:MM> — focus: <today|tomorrow>
+(guessed-frame note if no argument was passed, e.g. "frame guessed from time of day (after 15:00) — pass `today`/`tomorrow` to pin it")
 
 ## Meetings (calendar)
 - 9:30a  Matt / Ben 1:1 (recurring) — [zoom link]
@@ -124,7 +143,7 @@ You (the orchestrator) write the final brief directly in chat. Structure:
 
 | Source | Tool | Notes |
 |---|---|---|
-| Calendar | `google_calendar_list_events` | `time_min` = local midnight, `time_max` = +36h; `recurringEventId` null = standalone/new |
+| Calendar | `google_calendar_list_events` | `time_min` per frame table (midnight of target day), `time_max` = +36h; `recurringEventId` null = standalone/new |
 | Jira | `searchJiraIssuesUsingJql` | cloudId `datadoghq.atlassian.net`; NEVER `commented()` / `comment.created` (silently empty); fetch comments, filter client-side |
 | Slack | `slack_read_channel` | pages of 100, `oldest` bound; threads via `slack_read_thread`; incident search via `slack_search_public` with `after:` bound |
 | Gmail | `search_messages` / `get_message` | `label_ids: ["INBOX"]` only; `get_message` format `metadata` for header-only passes, `full` when the body matters |
@@ -133,6 +152,7 @@ You (the orchestrator) write the final brief directly in chat. Structure:
 ## Hard rules
 
 - NEVER silently skip a category. Missing data (auth error, empty result) is reported as "(none)" or "(error: <reason>)", never dropped from the brief.
+- The frame (`today`/`tomorrow`) is decided once, in Phase 1, and drives every anchor (calendar window, Jira cutoff, Slack `oldest`, triage cutoff) — never mix anchors from different frames mid-run.
 - NEVER archive outside `--archive` mode.
 - NEVER use Jira JQL `commented()` or `comment.created` (silently wrong on datadoghq.atlassian.net) — fetch comments and filter client-side.
 - NEVER flag a declined calendar event as a meeting to attend; list under "Not attending (declined)" if worth noticing (e.g. a recurring meeting you declined this instance).
