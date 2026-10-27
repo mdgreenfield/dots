@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+# triage — classify Gmail messages as SAFE-to-archive / REVIEW using only headers.
+# Deterministic, static, no network, no mutation. The daily-prep-triage agent
+# runs this first, then applies judgment on top.
+#
+# Usage:
+#   triage --in <headers.tsv>                # classify; TSV: id<TAB>from<TAB>subject<TAB>labels
+#   triage --record <message_id> [...]       # append ids to the dedupe log (~/.local/share/daily-prep/archived-log.jsonl)
+#   triage --seen                            # print ids already recorded in the dedupe log
+#   triage --help
+set -euo pipefail
+
+LOG_DIR="${HOME}/.local/share/daily-prep"
+LOG_FILE="${LOG_DIR}/archived-log.jsonl"
+
+usage() {
+  echo "Usage: $(basename "$0") --in <headers.tsv> | --record <id>... | --seen | --help"
+  echo ""
+  echo "Classifies Gmail headers (id, from, subject, labels) into SAFE (auto-archive)"
+  echo "or REVIEW (keep in inbox). Never touches Gmail itself."
+}
+
+record() {
+  mkdir -p "${LOG_DIR}"
+  n=0
+  for id in "$@"; do
+    # Accept only plain message ids (Gmail ids are alphanumeric)
+    clean="$(printf '%s' "${id}" | tr -cd '[:alnum:]_-')"
+    [ -n "${clean}" ] && [ "${clean}" = "${id}" ] || continue
+    printf '{"message_id":"%s","archived_at":"%s"}\n' "${clean}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "${LOG_FILE}"
+    n=$((n + 1))
+  done
+  echo "recorded ${n} id(s)"
+}
+
+seen() {
+  [ -f "${LOG_FILE}" ] || return 0
+  cut -d'"' -f4 "${LOG_FILE}" 2>/dev/null || true
+}
+
+# Protected labels: never archive anything carrying one of these.
+# (STARRED checked separately below since it's a system label.)
+protected_label() {
+  case "$1" in
+    Label_4015334566259090715|Label_3924215740476517084|Label_3578935222239022666|Label_4029458984560760406|Label_4852534262387277658) return 0 ;; # Benefits, compensation, espp, ipo, travel
+    Label_8783921659316564036|Label_2416481178107670379|Label_5087287767209135823|Label_3406269129883627626|Label_3442408546054640496) return 0 ;; # Datadog Case, workday, Helpdesk, postmortem, Infra Leads
+    *) return 1 ;;
+  esac
+}
+
+classify() {
+  # input: TAB-separated id, from, subject, labels
+  while IFS=$'\t' read -r id from subject labels; do
+    [ -n "${id:-}" ] || continue
+    from_lc="$(echo "${from:-}" | tr '[:upper:]' '[:lower:]')"
+    subj_lc="$(echo "${subject:-}" | tr '[:upper:]' '[:lower:]')"
+    verdict="REVIEW"
+    reason="default-keep"
+
+    # --- denylist first: never archive ---
+    if echo "${labels:-}" | grep -q 'STARRED'; then
+      echo -e "${id}\tKEEP\tstarred"
+      continue
+    fi
+    skip=0
+    for lab in $(echo "${labels:-}" | tr ',' '\n'); do
+      if protected_label "${lab}"; then skip=1; break; fi
+    done
+    if [ "${skip}" = "1" ]; then
+      echo -e "${id}\tKEEP\tprotected-label"
+      continue
+    fi
+    case "${from_lc}" in
+      *"matt.greenfield@datadoghq.com"*)
+        echo -e "${id}\tKEEP\town-mail"; continue ;;
+    esac
+
+    # --- SAFE categories ---
+    case "${from_lc}" in
+      *"@datadoghq.atlassian.net"*|*"atlassian.net>"*)
+        if echo "${subj_lc}" | grep -Eq '\[(comment|mention|assigned|mentioned you)'; then
+          verdict="REVIEW"; reason="jira-direct"
+        else
+          verdict="SAFE"; reason="jira-notification"
+        fi ;;
+      *"notifications@github.com"*)
+        if echo "${subj_lc}" | grep -Eq '(review requested|mentioned you|@[^ ]*asked|assigned you)'; then
+          verdict="REVIEW"; reason="github-direct"
+        else
+          verdict="SAFE"; reason="github-notification"
+        fi ;;
+      *"@datadoghq.com"*)
+        if echo "${subj_lc}" | grep -Eq 'conductor'; then
+          verdict="SAFE"; reason="conductor-notification"
+        elif echo "${subj_lc}" | grep -Eq '(webinar|newsletter|customer stor|product announcement|survey|digest|weekly report|no longer monitored|recovered)'; then
+          verdict="SAFE"; reason="dd-marketing-or-digest"
+        else
+          verdict="REVIEW"; reason="datadog-human-or-unknown"
+        fi ;;
+      *"opsgenie"*|*"pagerduty"*)
+        if echo "${subj_lc}" | grep -Eq '(weekly|digest|report)'; then
+          verdict="SAFE"; reason="pd-og-digest"
+        else
+          verdict="REVIEW"; reason="pd-og-incident-page"
+        fi ;;
+      *"@google.com"*|*"calendar-notification"*)
+        verdict="SAFE"; reason="calendar-notification" ;;
+    esac
+
+    echo -e "${id}\t${verdict}\t${reason}"
+  done
+}
+
+main() {
+  case "${1:-}" in
+    --in)
+      [ -n "${2:-}" ] && [ -f "${2}" ] || { echo "error: --in requires a readable TSV file" >&2; exit 2; }
+      classify < "${2}" ;;
+    --record) shift; [ $# -gt 0 ] || { echo "error: --record needs at least one id" >&2; exit 2; }; record "$@" ;;
+    --seen) seen ;;
+    -h|--help|"") usage ;;
+    *) echo "error: unknown option: $1" >&2; usage; exit 2 ;;
+  esac
+}
+
+main "$@"
