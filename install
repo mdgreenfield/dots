@@ -58,3 +58,11 @@ vim +PlugInstall +qall
 
 echo 'Configuring MySQL'
 cp ~/dots/.my.cnf ~/.my.cnf
+
+# Agent skills/definitions: dots is the source of truth; the consumer paths
+# are symlinks so live edits under ~/.omp and ~/.claude write through.
+echo 'Linking agent skills and agent definitions'
+mkdir -p ~/.claude
+ln -sfn ~/dots/.claude/skills ~/.claude/skills
+mkdir -p ~/.omp/agent
+ln -sfn ~/dots/.omp/agent/agents ~/.omp/agent/agents
