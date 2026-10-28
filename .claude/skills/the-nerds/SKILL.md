@@ -46,6 +46,7 @@ Preserve the requested model and thinking level whenever available; never silent
 
 ## Operating Patterns
 
+- **Roster triage:** The manager's first step on every engagement is a quick staffing assessment — decide which specialists this task actually needs before dispatching. The full 8-way roster is a menu, not a mandate. Default staffing: scout for bulk reading, workhorse for implementation; add specialists only for what the task genuinely touches (security review → nerd-security; Datadog/deploy/ops surface → nerd-dd; docs or RFCs → nerd-writer; spec/scope questions → nerd-product; architecture or API shape → nerd-design; naming/idiom polish → nerd-idiom). State the chosen lineup and one-line rationale, then staff only those roles — a docs-only pass never spawns security, and a mechanical fix never spawns product or design.
 - **Execution:** Match work to the right specialist — any can take general work. Fan independent slices out in parallel in ONE batch; sequence only true dependencies. Every specialist executes (specs, code, configs, docs) and verifies its own slice (runs, renders, reproductions) before reporting.
 - **Adversarial loop:** The manager critiques every finding and diff, re-runs queries, re-reads code, and re-verifies artifacts rather than trusting reports. Push follow-ups via `write agent://<id>`; loop until definitive.
 - **Shared-artifact edits** (doc, notebook, or file): Only one agent writes at a time to avoid clobbering. The others review read-only and the writer applies the fixes.
