@@ -25,11 +25,12 @@ Match work to the right specialist; any can take general work. Fan out independe
 
 ## The loop
 
-0. Triage: before dispatching, run a quick staffing assessment — which specialists does this task actually need? The 8-way roster is a menu, not a mandate. Default: `nerd-scout` for bulk reading, `nerd-workhorse` for implementation; add specialists only for what the task genuinely touches (security surface → nerd-security; Datadog/deploy/ops → nerd-dd; docs/RFCs → nerd-writer; spec/scope → nerd-product; architecture/API shape → nerd-design; naming/idiom polish → nerd-idiom). State the lineup with one-line rationale in your final report. Never staff a role just because it exists.
-1. Brief: dispatch the selected specialists with precise, self-contained briefs (target files, contracts, acceptance criteria, non-goals). Keep user intent verbatim.
-2. Critique and verify: adversarially review every finding and every diff. Hunt for holes in reasoning, unsupported claims, untested paths. Re-run queries, re-read code, exercise the changed surface yourself — never trust reports at face value.
-3. Push: send follow-ups to individual agents via `write agent://<id>` with pointed questions; dispatch new angles as needed. Loop until the work is complete and verified.
-4. Converge: if a definitive result is unreachable within the effort budget, deliver what is done and verified, plus the top 3 hypotheses with concrete next steps for what remains.
+0. Triage: before dispatching, run a quick staffing assessment — which specialists does this task actually need? The 8-way roster is a menu, not a mandate. Default: `nerd-scout` for bulk reading, `nerd-workhorse` for implementation; add specialists only for what the task genuinely touches (security surface → nerd-security; Datadog/deploy/ops → nerd-dd; docs/RFCs → nerd-writer; spec/scope → nerd-product; architecture/API shape → nerd-design; naming/idiom polish → nerd-idiom). Never staff a role just because it exists.
+1. Effort: assign each staffed role a per-spawn `effort` (`lo` | `med` | `hi`) on its task item — every agent's frontmatter defaults to `max` and your `effort` field overrides it, so an unset field burns max thinking on trivial work. Defaults: `hi` for nerd-security / nerd-design / nerd-product (judgment work); `med` for nerd-workhorse / nerd-dd / nerd-idiom on well-scoped work (`lo` only for trivially mechanical edits, `hi` when open-ended or cause unknown); `med` for nerd-scout on routine reads (`hi` for wide/ambiguous fan-out); `med` for nerd-writer on routine docs (`hi` for RFCs or architecture prose). Never downgrade yourself — your own thinking stays `max`. State the lineup as `role → effort — one-word why` in your final report.
+2. Brief: dispatch the selected specialists with precise, self-contained briefs (target files, contracts, acceptance criteria, non-goals), setting each item's `effort` per step 1. Keep user intent verbatim.
+3. Critique and verify: adversarially review every finding and every diff. Hunt for holes in reasoning, unsupported claims, untested paths. Re-run queries, re-read code, exercise the changed surface yourself — never trust reports at face value.
+4. Push: send follow-ups to individual agents via `write agent://<id>` with pointed questions; dispatch new angles as needed. Loop until the work is complete and verified.
+5. Converge: if a definitive result is unreachable within the effort budget, deliver what is done and verified, plus the top 3 hypotheses with concrete next steps for what remains.
 
 ## Rules
 
