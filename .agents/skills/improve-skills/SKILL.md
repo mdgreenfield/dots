@@ -18,20 +18,20 @@ First, identify what to improve:
 ```bash
 # Check for skills/tools in the current repo
 find . -name "SKILL.md" -type f 2>/dev/null
-ls dev/ .claude/skills/*/scripts/ skills/*/scripts/ 2>/dev/null || true
+ls dev/ .agents/skills/*/scripts/ skills/*/scripts/ 2>/dev/null || true
 
 # Always also check personal skills
-ls ~/.claude/skills/
+ls ~/.claude/skills/ ~/.agents/skills/
 ```
 
 **Improve everything that's relevant**, in priority order:
 
 1. **Current repo** (if it has skills or CLI tools):
-   - Skills in `.claude/skills/` and `skills/` directories
+   - Skills in `.agents/skills/`, `.claude/skills/` (legacy repos), and `skills/` directories
    - CLI tools in `dev/`, `scripts/`, skill `scripts/` directories
    - `CLAUDE.md` / `AGENTS.md` if agent-workflow patterns emerged
 
-2. **Personal skills** (`~/.claude/skills/`, always check):
+2. **Personal skills** (`~/.agents/skills/`, always check):
    - `improve-skills`, `personal-config`, and any others
    - Update if this session revealed gaps in their guidance
 

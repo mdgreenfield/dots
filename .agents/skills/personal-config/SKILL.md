@@ -19,7 +19,8 @@ Config files are **copies**, not symlinks. `~/dots/` is the source of truth.
 > ⚠️ If you edit a config directly in `~` (e.g. `~/.zshrc`), those changes will be **lost** the next time `install` or `apply` runs. Always edit in `~/dots/` first, then apply.
 
 **Exceptions (symlinks — changes take effect immediately, no copy needed):**
-- `~/.claude/skills` → `~/dots/.claude/skills`
+- `~/.claude/skills` → `~/dots/.agents/skills`
+- `~/.agents/skills` → `~/dots/.agents/skills`
 - `~/AGENTS.md` → `~/dots/AGENTS.md`
 
 ## Quick Start
@@ -27,7 +28,7 @@ Config files are **copies**, not symlinks. `~/dots/` is the source of truth.
 ```bash
 # 1. Edit a config in ~/dots
 # 2. Apply all configs at once:
-~/dots/.claude/skills/personal-config/scripts/apply
+~/dots/.agents/skills/personal-config/scripts/apply
 
 # 3. Commit
 cd ~/dots && git add -p && git commit -m "config: <what changed>" && git push
@@ -62,7 +63,8 @@ Recent commits:
 
 | Symlink | Points to | Notes |
 |---------|-----------|-------|
-| `~/.claude/skills` | `~/dots/.claude/skills` | Skills take effect immediately |
+| `~/.claude/skills` | `~/dots/.agents/skills` | Skills take effect immediately |
+| `~/.agents/skills` | `~/dots/.agents/skills` | Codex CLI / Gemini CLI / Cursor user skills path |
 | `~/AGENTS.md` | `~/dots/AGENTS.md` | Agent instructions for all tools |
 | `~/.claude/CLAUDE.md` loads | `~/dots/AGENTS.md` | Via `@~/dots/AGENTS.md` include |
 
@@ -108,7 +110,7 @@ Recent commits:
 ### Add a shell alias
 Edit `~/dots/.zshrc`, then:
 ```bash
-~/dots/.claude/skills/personal-config/scripts/apply
+~/dots/.agents/skills/personal-config/scripts/apply
 ```
 
 ### Add a shell function
@@ -143,7 +145,8 @@ git clone <repo> ~/dots && cd ~/dots && bash install
 brew bundle --file=~/dots/brew/Brewfile
 
 # 2. Set up symlinks
-ln -sf ~/dots/.claude/skills ~/.claude/skills
+ln -sf ~/dots/.agents/skills ~/.claude/skills
+mkdir -p ~/.agents && ln -sf ~/dots/.agents/skills ~/.agents/skills
 ln -sf ~/dots/AGENTS.md ~/AGENTS.md
 echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md
 ```
