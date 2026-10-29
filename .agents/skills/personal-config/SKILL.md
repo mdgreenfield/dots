@@ -14,13 +14,14 @@ Dotfiles live in `~/dots` (a git repo synced to GitHub). Changes must be:
 
 ## Deployment Model
 
-Config files are **copies**, not symlinks. `~/dots/` is the source of truth.
+Config files are **copies**; symlinks are **managed**. `~/dots/` is the source of truth for both.
 
 > ⚠️ If you edit a config directly in `~` (e.g. `~/.zshrc`), those changes will be **lost** the next time `install` or `apply` runs. Always edit in `~/dots/` first, then apply.
 
-**Exceptions (symlinks — changes take effect immediately, no copy needed):**
+Managed symlinks (apply repairs/creates these, never clobbers real files):
 - `~/.claude/skills` → `~/dots/.agents/skills`
 - `~/.agents/skills` → `~/dots/.agents/skills`
+- `~/.omp/agent/agents` → `~/dots/.omp/agent/agents`
 - `~/AGENTS.md` → `~/dots/AGENTS.md`
 
 ## Quick Start
@@ -61,12 +62,32 @@ Recent commits:
 
 ## Symlinks
 
+All created/repaired by `apply` (idempotent `ln -sfn`; skips a real file rather than clobbering it).
+
 | Symlink | Points to | Notes |
 |---------|-----------|-------|
-| `~/.claude/skills` | `~/dots/.agents/skills` | Skills take effect immediately |
+| `~/.claude/skills` | `~/dots/.agents/skills` | Claude Code user skills; live edits |
 | `~/.agents/skills` | `~/dots/.agents/skills` | Codex CLI / Gemini CLI / Cursor user skills path |
+| `~/.omp/agent/agents` | `~/dots/.omp/agent/agents` | omp subagent definitions |
 | `~/AGENTS.md` | `~/dots/AGENTS.md` | Agent instructions for all tools |
-| `~/.claude/CLAUDE.md` loads | `~/dots/AGENTS.md` | Via `@~/dots/AGENTS.md` include |
+| `~/.claude/CLAUDE.md` loads | `~/dots/AGENTS.md` | Via `@~/dots/AGENTS.md` include (one-time `echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md`, not managed by apply) |
+
+## Agent tool wiring
+
+Who reads what — needed whenever adding/moving skills or agents:
+
+| Tool | Reads skills from | Notes |
+|------|-------------------|-------|
+| Claude Code | `~/.claude/skills` (symlink) | User skills; project `.claude/skills/` per repo |
+| Codex CLI / Gemini CLI / Cursor | `~/.agents/skills` (symlink) | The cross-agent standard location |
+| omp | `skills.customDirectories` in `~/.omp/agent/config.yml` | `enableClaudeUser: false` — ignores `~/.claude/skills` entirely |
+
+omp customDirectories gotchas:
+- Scan is **non-recursive**: `*/SKILL.md` one level under each listed dir.
+- Lists dirs like `~/dots/.agents/skills`, `~/dd/identity-core`, and `~/dd/claude-marketplace/<plugin>/skills`.
+- **New/renamed skill names need an omp restart**; changed SKILL.md *bodies* are read live via `skill://<name>`.
+- Identical duplicate names collapse; differing same-name skills get `<namespace>/<name>` aliases.
+- Changing config: write `cfg://skills/customDirectories` (session-only) then write `cfg://skills/customDirectories/save` to persist.
 
 ## Key Config Details
 
@@ -144,9 +165,10 @@ git config --global alias.<name> '<value>'
 git clone <repo> ~/dots && cd ~/dots && bash install
 brew bundle --file=~/dots/brew/Brewfile
 
-# 2. Set up symlinks
+# 2. Set up symlinks (or just run apply, which manages them)
 ln -sf ~/dots/.agents/skills ~/.claude/skills
-mkdir -p ~/.agents && ln -sf ~/dots/.agents/skills ~/.agents/skills
+ln -sf ~/dots/.agents/skills ~/.agents/skills
+ln -sf ~/dots/.omp/agent/agents ~/.omp/agent/agents
 ln -sf ~/dots/AGENTS.md ~/AGENTS.md
 echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md
 ```

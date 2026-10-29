@@ -1,7 +1,7 @@
 ---
 name: improve-skills
 description: Reflect on your recent experience and improve the skills and CLI tools in the current repo. Create new tools when needed. Use after completing a task involving scripts, skills, or repetitive workflows.
-allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task
+allowed-tools: Bash Read Write Edit Grep Glob Task
 user-invocable: true
 ---
 
@@ -20,8 +20,8 @@ First, identify what to improve:
 find . -name "SKILL.md" -type f 2>/dev/null
 ls dev/ .agents/skills/*/scripts/ skills/*/scripts/ 2>/dev/null || true
 
-# Always also check personal skills
-ls ~/.claude/skills/ ~/.agents/skills/
+# Personal skills (~/.agents/skills; ~/.claude/skills symlinks to it too)
+ls ~/.agents/skills/
 ```
 
 **Improve everything that's relevant**, in priority order:

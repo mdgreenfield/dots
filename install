@@ -17,9 +17,6 @@ else
 fi
 
 echo 'Configuring oh-my-zsh'
-rm ~/.zshrc || true
-cp ~/dots/.zshrc ~/.zshrc
-
 mkdir -p "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
   git clone --quiet https://github.com/zsh-users/zsh-autosuggestions \
@@ -30,39 +27,19 @@ if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlightin
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 fi
 
-echo 'Configuring starship'
-mkdir -p ~/.config
-cp ~/dots/starship.toml ~/.config/starship.toml
-
 echo 'Configuring tmux'
-cp ~/dots/.tmux.conf ~/.tmux.conf
 mkdir -p ~/.tmux
 if [ ! -d ~/.tmux/kube-tmux ]; then
   git clone --quiet https://github.com/jonmosco/kube-tmux.git ~/.tmux/kube-tmux
 fi
 
-echo 'Configuring ghostty'
-mkdir -p ~/.config/ghostty
-cp ~/dots/ghostty-config ~/.config/ghostty/config
-
-echo 'Configuring git'
-rm ~/.gitignore || true
-cp ~/dots/.gitignore ~/.gitignore
-
 echo 'Configuring vim'
 rm -rf ~/.vim/
-cp ~/dots/.vimrc ~/.vimrc
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 vim +PlugInstall +qall
 
-echo 'Configuring MySQL'
-cp ~/dots/.my.cnf ~/.my.cnf
-
-# Agent skills/definitions: dots is the source of truth; the consumer paths
-# are symlinks so live edits under ~/.omp, ~/.claude, and ~/.agents write through.
-echo 'Linking agent skills and agent definitions'
-ln -sfn ~/dots/.agents/skills ~/.claude/skills
-mkdir -p ~/.agents ~/.omp/agent
-ln -sfn ~/dots/.agents/skills ~/.agents/skills
-ln -sfn ~/dots/.omp/agent/agents ~/.omp/agent/agents
+# Everything else (config file copies + symlinks) is owned by apply —
+# single source of truth for what lands where. Runs idempotently.
+echo 'Applying configs and links'
+~/dots/.agents/skills/personal-config/scripts/apply
