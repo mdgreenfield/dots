@@ -35,6 +35,10 @@ Most work repositories live under `~/dd`. Exceptions:
 When searching for a repo or navigating to one by name, default to
 looking under `~/dd` first.
 
+- `~/knowledge-base` — LLM-maintained wiki of work context (its own
+  AGENTS.md governs ingest/query/lint there; never modify `raw/`;
+  never push or copy its contents to any remote or external service)
+
 ## GitHub
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
@@ -64,8 +68,9 @@ This applies to commit messages and any other text passed via heredoc.
 
 ## File Editing
 
-Always use the `Edit` or `Write` tools to modify files. Never use Python
-scripts, sed, or awk for file editing.
+Always use the agent's file editing tools (`Edit`/`Write`, lowercase
+`edit`/`write` in some agents). Never use Python scripts, sed, or awk
+for file editing.
 
 
 ## Code Style
