@@ -120,5 +120,3 @@ case $- in *i*)
   ;;
 esac
 
-
-eval "$(/opt/dogbrew/bin/dogbrew init sh)"
