@@ -11,6 +11,11 @@ if [[ -z "$TMUX" && -z "$HERDR_ENV" && -z "$NOTMUX" ]]; then
   fi
 fi
 
+# Runs after the attach block so pane shells (which skip attach) still load it;
+# init.sh dedups PATH on re-source.
+# dogbrew shell-hooks: if you don't want this to be called, comment it out and dogbrew will honour that on subsequent updates.  See also the more dangerous `dogbrew self setup --disable-shell-hooks`.
+[ -f "/opt/dogbrew/share/etc/dogbrew/init.zsh" ] && . "/opt/dogbrew/share/etc/dogbrew/init.zsh"
+
 # Keep fpath deduplicated: inherited duplicates (FPATH still exported in old
 # pane environments) would otherwise invalidate compinit's zcompdump cache.
 typeset -U fpath
