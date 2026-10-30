@@ -21,7 +21,7 @@ Config files are **copies**; symlinks are **managed**. `~/dots/` is the source o
 Managed symlinks (apply repairs/creates these, never clobbers real files):
 - `~/.claude/skills` → `~/dots/.agents/skills`
 - `~/.agents/skills` → `~/dots/.agents/skills`
-- `~/.omp/agent/agents` → `~/dots/.omp/agent/agents`
+- `~/.omp/agent/agents/<name>.md` → `~/dots/.agents/skills/<skill>/agents/<name>.md` (one link per file; agent definitions live in the skill that uses them)
 - `~/AGENTS.md` → `~/dots/AGENTS.md`
 
 ## Quick Start
@@ -68,7 +68,7 @@ All created/repaired by `apply` (idempotent `ln -sfn`; skips a real file rather 
 |---------|-----------|-------|
 | `~/.claude/skills` | `~/dots/.agents/skills` | Claude Code user skills; live edits |
 | `~/.agents/skills` | `~/dots/.agents/skills` | Codex CLI / Gemini CLI / Cursor user skills path |
-| `~/.omp/agent/agents` | `~/dots/.omp/agent/agents` | omp subagent definitions |
+| `~/.omp/agent/agents/*.md` | `~/dots/.agents/skills/*/agents/*.md` | omp subagent definitions, bundled with their skill; per-file links, stale ones pruned |
 | `~/AGENTS.md` | `~/dots/AGENTS.md` | Agent instructions for all tools |
 | `~/.claude/CLAUDE.md` loads | `~/dots/AGENTS.md` | Via `@~/dots/AGENTS.md` include (one-time `echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md`, not managed by apply) |
 
@@ -168,7 +168,8 @@ brew bundle --file=~/dots/brew/Brewfile
 # 2. Set up symlinks (or just run apply, which manages them)
 ln -sf ~/dots/.agents/skills ~/.claude/skills
 ln -sf ~/dots/.agents/skills ~/.agents/skills
-ln -sf ~/dots/.omp/agent/agents ~/.omp/agent/agents
+mkdir -p ~/.omp/agent/agents
+for f in ~/dots/.agents/skills/*/agents/*.md; do ln -sf "$f" ~/.omp/agent/agents/; done
 ln -sf ~/dots/AGENTS.md ~/AGENTS.md
 echo '@~/dots/AGENTS.md' > ~/.claude/CLAUDE.md
 ```

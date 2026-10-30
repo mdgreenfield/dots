@@ -164,11 +164,11 @@ You (the orchestrator) write the final brief directly in chat. Structure:
 
 ## Model note
 
-Model is enforced in `~/.omp/agent/agents/daily-prep-gatherer.md` and `~/.omp/agent/agents/daily-prep-triage.md` (`model:` + `thinking-level:` frontmatter, same mechanism as `the-nerds`). Dispatch by agent name via `task`; never override `model` on the task call (per-item `model` is seance-only). If a requested model is unavailable, fail loudly and fall back to the platform default.
+Model is enforced in `agents/daily-prep-gatherer.md` and `agents/daily-prep-triage.md` in this skill directory (`model:` + `thinking-level:` frontmatter, same mechanism as `the-nerds`; `apply` links them into `~/.omp/agent/agents/`). Dispatch by agent name via `task`; never override `model` on the task call (per-item `model` is seance-only). If a requested model is unavailable, fail loudly and fall back to the platform default.
 
 ## Related files
 
-- Agent definitions: `~/.omp/agent/agents/daily-prep-gatherer.md`, `~/.omp/agent/agents/daily-prep-triage.md`
+- Agent definitions: `agents/daily-prep-gatherer.md`, `agents/daily-prep-triage.md` in this skill directory
 - Triage classifier: `scripts/triage` in this skill directory
 - Archive dedupe log: `~/.local/share/daily-prep/archived-log.jsonl`
 - Recurring Slack channel IDs and incident-search recipe: `~/notes/sessions/session_2026-10-26_slack-channel-digests_identity-core-team.md`

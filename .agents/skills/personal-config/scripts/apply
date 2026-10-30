@@ -23,7 +23,28 @@ link() {
 
 link .agents/skills .claude/skills
 link .agents/skills .agents/skills
-link .omp/agent/agents .omp/agent/agents
+# omp subagent definitions live inside the skill that uses them
+# (.agents/skills/<skill>/agents/*.md) and are linked into ~/.omp/agent/agents
+# one file at a time. That directory must be real, so retire the old
+# whole-directory symlink into dots first.
+AGENTS_DST="$HOME/.omp/agent/agents"
+if [ -L "$AGENTS_DST" ] && [ "$(readlink "$AGENTS_DST")" = "$DOTS/.omp/agent/agents" ]; then
+  rm "$AGENTS_DST"
+  echo "unlinked: .omp/agent/agents (was a directory symlink)"
+fi
+mkdir -p "$AGENTS_DST"
+for f in "$DOTS"/.agents/skills/*/agents/*.md; do
+  [ -e "$f" ] || continue
+  link "${f#"$DOTS"/}" ".omp/agent/agents/$(basename "$f")"
+done
+# Drop links into dots whose agent file was removed or renamed.
+for l in "$AGENTS_DST"/*; do
+  if [ -L "$l" ] && [ ! -e "$l" ] && [[ "$(readlink "$l")" == "$DOTS"/* ]]; then
+    rm "$l"
+    echo "pruned: .omp/agent/agents/$(basename "$l")"
+    CHANGED=$((CHANGED + 1))
+  fi
+done
 link AGENTS.md AGENTS.md
 
 apply() {

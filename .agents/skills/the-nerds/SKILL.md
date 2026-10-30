@@ -26,7 +26,7 @@ The 8 specialists:
 
 ## Model Configuration
 
-Models are enforced by the agent definitions in `~/.omp/agent/agents/nerd-*.md` (`model:` + `thinking-level:` frontmatter) — dispatch by agent name, never by bare `task`, or the specialists run on the session default instead of their assigned models. Only AI-gateway selectors are used; non-gateway models fail.
+Models are enforced by the agent definitions in `agents/nerd-*.md` in this skill directory (`model:` + `thinking-level:` frontmatter; `apply` links them into `~/.omp/agent/agents/`) — dispatch by agent name, never by bare `task`, or the specialists run on the session default instead of their assigned models. Only AI-gateway selectors are used; non-gateway models fail.
 
 | Role | Agent | Model | Thinking |
 |---|---|---|---|
