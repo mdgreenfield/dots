@@ -86,6 +86,11 @@ what the code does. Reserve comments for:
 
 ## Research and Analysis
 
+Always search the Datadog Confluence wiki before attempting to search the
+web. If more context or information is needed to do a task well, ask
+additional questions until the task can be done effectively and with high
+quality.
+
 When asked to do a deep dive or analysis on a topic:
 
 - Dispatch multiple subagents in parallel to fetch content from external
@@ -99,6 +104,61 @@ When asked to do a deep dive or analysis on a topic:
 - Once research is complete, ask any clarifying questions before forming
   conclusions. Do not jump to recommendations if there are open questions
   that would materially affect the answer.
+
+## Helper Scripts
+
+Always use Go when writing temporary or helper scripts. Any repeated
+testing, API calls, or CLI invocations should be turned into a repeatable
+Go program. Do not use Python for this. (The `edit`/`write` file tools and
+shell builtins are unaffected; this rule is about program scripts.)
+
+## Git Safety Rails
+
+- Never commit directly to main or master, and never push directly to
+  main or master.
+- Create new branches from the latest changes on the remote default
+  branch (usually `main`), unless directed otherwise.
+- Set new branches to track their origin counterpart:
+  `git push origin <branch>:<branch>`.
+- Rebase onto the latest changes on main before pushing new commits.
+- Each agent doing concurrent work should use an isolated worktree of the
+  local repo clone to avoid conflicts between agents.
+
+## Status Updates
+
+When asked for status on in-flight work, lead with a table of open PRs
+from the current work, one row per PR: dependent PRs first in the order
+they must merge, independent ones after. Columns:
+
+`| PR | What | Review | Blocker / next step |`
+
+Keep it narrow:
+
+- PR: markdown link with repo name, e.g. [piper#120](url)
+- Review: draft or ready, plus unresolved thread count, e.g. `draft, 2 unresolved`
+- Blocker / next step: who acts next and what they do, including failing
+  or pending CI when that is what blocks; "ready to merge" when nothing
+  is left
+
+Query live PR state (`gh`) before building the table; never report from
+memory. After the table: anything the user needs to do that isn't a PR
+row, then what background agents are doing, a line each.
+
+## Living Repo Docs
+
+Create a `CLAUDE.md` in any repository we work together on, if there isn't
+one already. Add and update directory-specific `CLAUDE.md` files with
+relevant context as part of completing a task, focusing on high-level and
+strategic goals and key constraints, so future work can learn from the
+past. `CLAUDE.md` is the right place for rules that must always apply; do
+not move its content into memories.
+
+## Debugging
+
+Always try Datadog MCPs for org2 or ddstaging to get logs and operational
+telemetry before using tools like `kubectl`. A good way to illustrate
+problems is by creating a Datadog notebook with widgets or logs that show
+the issue and sharing the hyperlink.
 
 
 
