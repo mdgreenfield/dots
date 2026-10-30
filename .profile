@@ -16,7 +16,7 @@ export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
 # Interactive shells only: prompt, aliases, completions, tmux auto-attach.
 # Non-interactive login shells (herdr tab-bar commands, cron) skip all of this.
 case $- in *i*)
-  PS1='[\u@\h \W$(__git_ps1 " (%s)")]\m\$ '
+  PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
   alias vi='vim'
   alias ll="ls -al"
 
@@ -120,4 +120,6 @@ case $- in *i*)
   ;;
 esac
 
-
+# Machine-local overrides (work tooling, per-host paths). Not in dots, so
+# work-only config never lands in a public repo. Silently skipped if absent.
+[ -r "$HOME/.profile.local" ] && . "$HOME/.profile.local"

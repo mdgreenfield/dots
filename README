@@ -39,3 +39,17 @@ EOF
 Verify with `git config --show-origin --get user.email` from inside a Datadog
 repo (expect `.gitconfig.work`) and from anywhere else (expect
 `.gitconfig.personal`).
+
+## Machine-local shell config
+
+Same idea as the git identity split. Work tooling and per-host paths do not
+belong in a public repo, so `.profile` ends by sourcing a machine-local file
+that is NOT in this repo:
+
+- `~/.profile.local` — sourced by `.profile` (sh/bash, i.e. `/bin/sh -lc`)
+
+It is silently skipped if missing, so personal machines do not need it.
+Put per-host PATH entries, work-only env vars, and similar there.
+`apply` never touches it, so it survives every config update.
+
+Verify with `/bin/sh -lc true` — it should print nothing.
