@@ -19,7 +19,7 @@ Config files are **copies**; symlinks are **managed**. `~/dots/` is the source o
 > ⚠️ If you edit a config directly in `~` (e.g. `~/.zshrc`), those changes will be **lost** the next time `install` or `apply` runs. Always edit in `~/dots/` first, then apply.
 
 Managed symlinks (apply repairs/creates these, never clobbers real files):
-- `~/.claude/skills` → `~/dots/.agents/skills`
+- `~/.claude/skills/<skill>` → `~/dots/.agents/skills/<skill>` (one link per skill; `~/.claude/skills` stays a real directory because the Claude desktop app writes `synced/` into it)
 - `~/.agents/skills` → `~/dots/.agents/skills`
 - `~/.omp/agent/agents/<name>.md` → `~/dots/.agents/skills/<skill>/agents/<name>.md` (one link per file; agent definitions live in the skill that uses them)
 - `~/AGENTS.md` → `~/dots/AGENTS.md`
@@ -66,7 +66,7 @@ All created/repaired by `apply` (idempotent `ln -sfn`; skips a real file rather 
 
 | Symlink | Points to | Notes |
 |---------|-----------|-------|
-| `~/.claude/skills` | `~/dots/.agents/skills` | Claude Code user skills; live edits |
+| `~/.claude/skills/<skill>` | `~/dots/.agents/skills/<skill>` | Claude Code user skills; per-skill links so the app's `synced/` never lands in dots; stale links pruned |
 | `~/.agents/skills` | `~/dots/.agents/skills` | Codex CLI / Gemini CLI / Cursor user skills path |
 | `~/.omp/agent/agents/*.md` | `~/dots/.agents/skills/*/agents/*.md` | omp subagent definitions, bundled with their skill; per-file links, stale ones pruned |
 | `~/AGENTS.md` | `~/dots/AGENTS.md` | Agent instructions for all tools |
@@ -166,7 +166,8 @@ git clone <repo> ~/dots && cd ~/dots && bash install
 brew bundle --file=~/dots/brew/Brewfile
 
 # 2. Set up symlinks (or just run apply, which manages them)
-ln -sf ~/dots/.agents/skills ~/.claude/skills
+mkdir -p ~/.claude/skills
+for d in ~/dots/.agents/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
 ln -sf ~/dots/.agents/skills ~/.agents/skills
 mkdir -p ~/.omp/agent/agents
 for f in ~/dots/.agents/skills/*/agents/*.md; do ln -sf "$f" ~/.omp/agent/agents/; done

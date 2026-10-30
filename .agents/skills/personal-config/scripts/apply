@@ -21,7 +21,28 @@ link() {
   CHANGED=$((CHANGED + 1))
 }
 
-link .agents/skills .claude/skills
+# ~/.claude/skills must be a real directory: the Claude desktop app writes its
+# built-in skills into ~/.claude/skills/synced, and a directory symlink would
+# land them in this repo. Link each dots skill in individually instead, and
+# retire the old whole-directory symlink first.
+CLAUDE_SKILLS="$HOME/.claude/skills"
+if [ -L "$CLAUDE_SKILLS" ] && [ "$(readlink "$CLAUDE_SKILLS")" = "$DOTS/.agents/skills" ]; then
+  rm "$CLAUDE_SKILLS"
+  echo "unlinked: .claude/skills (was a directory symlink)"
+fi
+mkdir -p "$CLAUDE_SKILLS"
+for d in "$DOTS"/.agents/skills/*/; do
+  s="$(basename "$d")"
+  link ".agents/skills/$s" ".claude/skills/$s"
+done
+# Drop links into dots whose skill was removed or renamed.
+for l in "$CLAUDE_SKILLS"/*; do
+  if [ -L "$l" ] && [ ! -e "$l" ] && [[ "$(readlink "$l")" == "$DOTS"/* ]]; then
+    rm "$l"
+    echo "pruned: .claude/skills/$(basename "$l")"
+    CHANGED=$((CHANGED + 1))
+  fi
+done
 link .agents/skills .agents/skills
 # omp subagent definitions live inside the skill that uses them
 # (.agents/skills/<skill>/agents/*.md) and are linked into ~/.omp/agent/agents
