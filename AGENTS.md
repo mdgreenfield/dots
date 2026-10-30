@@ -22,8 +22,7 @@ Specifically, you must NEVER (without explicit per-action approval):
   (Slack, GitHub issues/PRs, Jira, etc.) beyond what the user has
   already explicitly requested in the current turn.
 
-When in doubt, stop and ask. The cost of one confirmation is always
-lower than the cost of an unintended change to a live system.
+When in doubt, stop and ask.
 
 ## Repository Locations
 
@@ -35,19 +34,13 @@ Most work repositories live under `~/dd`. Exceptions:
 When searching for a repo or navigating to one by name, default to
 looking under `~/dd` first.
 
-- `~/knowledge-base` — LLM-maintained wiki of work context (its own
-  AGENTS.md governs ingest/query/lint there; never modify `raw/`;
-  never push or copy its contents to any remote or external service)
+`~/knowledge-base` is an LLM-maintained wiki of work context (its own
+AGENTS.md governs ingest/query/lint there; never modify `raw/`; never
+push or copy its contents to any remote or external service).
 
 ## GitHub
 
 When interacting with GitHub (github.com), ALWAYS use `gh` on the command line.
-
-If `gh` returns a 401 error, re-authenticate with:
-
-```bash
-gh auth login
-```
 
 For branch naming, commit hygiene, commit message format, and PR
 format, use the `git-workflow` skill.
@@ -72,7 +65,6 @@ Always use the agent's file editing tools (`Edit`/`Write`, lowercase
 `edit`/`write` in some agents). Never use Python scripts, sed, or awk
 for file editing.
 
-
 ## Code Style
 
 Write code that is concise and easy for a reviewer to follow. Code
@@ -83,27 +75,13 @@ what the code does. Reserve comments for:
 - Caveats, gotchas, or non-obvious constraints
 - Conditions or side effects that callers need to be aware of
 
-
 ## Research and Analysis
 
-Always search the Datadog Confluence wiki before attempting to search the
-web. If more context or information is needed to do a task well, ask
-additional questions until the task can be done effectively and with high
-quality.
+For Datadog internal topics, search the Datadog Confluence wiki before
+searching the web. When context is exhausted and requirements remain
+ambiguous, ask before proceeding.
 
-When asked to do a deep dive or analysis on a topic:
-
-- Dispatch multiple subagents in parallel to fetch content from external
-  sources rather than querying them sequentially. Use one subagent per
-  source or workstream so fetches overlap.
-- Before drawing conclusions, verify you have a complete picture. Cross-check
-  findings across sources, identify gaps, and follow up on anything ambiguous
-  or contradictory before reporting back.
-- Do not summarize prematurely. Incomplete research that misses key context
-  is worse than taking more time to be thorough.
-- Once research is complete, ask any clarifying questions before forming
-  conclusions. Do not jump to recommendations if there are open questions
-  that would materially affect the answer.
+For deep dives or multi-source analysis, use the `deep-dive` skill.
 
 ## Helper Scripts
 
@@ -126,23 +104,7 @@ shell builtins are unaffected; this rule is about program scripts.)
 
 ## Status Updates
 
-When asked for status on in-flight work, lead with a table of open PRs
-from the current work, one row per PR: dependent PRs first in the order
-they must merge, independent ones after. Columns:
-
-`| PR | What | Review | Blocker / next step |`
-
-Keep it narrow:
-
-- PR: markdown link with repo name, e.g. [piper#120](url)
-- Review: draft or ready, plus unresolved thread count, e.g. `draft, 2 unresolved`
-- Blocker / next step: who acts next and what they do, including failing
-  or pending CI when that is what blocks; "ready to merge" when nothing
-  is left
-
-Query live PR state (`gh`) before building the table; never report from
-memory. After the table: anything the user needs to do that isn't a PR
-row, then what background agents are doing, a line each.
+When asked for status on in-flight work, use the `pr-status` skill.
 
 ## Living Repo Docs
 
@@ -156,11 +118,7 @@ not move its content into memories.
 ## Debugging
 
 Always try Datadog MCPs for org2 or ddstaging to get logs and operational
-telemetry before using tools like `kubectl`. A good way to illustrate
-problems is by creating a Datadog notebook with widgets or logs that show
-the issue and sharing the hyperlink.
-
-
+telemetry before using tools like `kubectl`.
 
 ## Writing Style
 
